@@ -16,7 +16,6 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
 
     public TicTacToeFrame(String title, int width) {
         super(title);
-        proposeNewGame(); //TODO only for test, delete after it
         setSize(width, width); // ustawienie wymiarów okna (metoda JFrame)
         setVisible(true); // ustawienie widoczności (metoda JFrame)
         for (int i = 0; i < 9; i++) {
@@ -64,13 +63,13 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
 
     private boolean isWinner(int i, int j, int k) {
         if (buttons.get(i).getText().equals(buttons.get(j).getText()) && buttons.get(i).getText().equals(buttons.get(k).getText()) && !buttons.get(i).getText().equals("")) {
-            showWinnersButtons(i,j,k);
+            showWinnersButtons(i, j, k);
             return true;
         }
         return false;
     }
 
-    private void showWinnersButtons(int i, int j, int k){
+    private void showWinnersButtons(int i, int j, int k) {
         buttons.get(i).setBackground(Color.green);
         buttons.get(j).setBackground(Color.green);
         buttons.get(k).setBackground(Color.green);
@@ -91,11 +90,19 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     }
 
     private void proposeNewGame() {
-        final JOptionPane optionPane = new JOptionPane(
-                "Play again?",
-                JOptionPane.QUESTION_MESSAGE,
-                JOptionPane.YES_NO_OPTION);
-        optionPane.getMessageType();
+        int decision = JOptionPane.showConfirmDialog(null,
+                "Play again?", "GAME ENDS", JOptionPane.YES_NO_OPTION);
+        System.out.println(decision); //TODO only for test, delete after it
+        if (decision == 0) {
+            for (JButton button : buttons
+                    ) {
+                button.setEnabled(true);
+                button.setText("");
+                button.setBackground(null);
+            }
+        }
+        else {
+            setVisible(false); //can't see JFrame
+            dispose();} //destroy obcject
     }
-    //TODO news 02 - make method which starts new games
 }
