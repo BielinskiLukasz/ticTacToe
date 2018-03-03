@@ -1,8 +1,9 @@
 package com.bielinski;
 
-public class Main {
+import javax.swing.*;
 
+public class Main {
     public static void main(String[] args) {
-	// write your code here
+        SwingUtilities.invokeLater(() -> new TicTacToeFrame("Kółko i Krzyżyk", 500));
     }
 }
