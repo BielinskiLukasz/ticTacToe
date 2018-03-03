@@ -92,7 +92,6 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     private void proposeNewGame() {
         int decision = JOptionPane.showConfirmDialog(null,
                 "Play again?", "GAME ENDS", JOptionPane.YES_NO_OPTION);
-        System.out.println(decision); //TODO only for test, delete after it
         if (decision == 0) {
             for (JButton button : buttons
                     ) {
