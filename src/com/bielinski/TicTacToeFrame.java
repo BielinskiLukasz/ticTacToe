@@ -91,11 +91,6 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     }
 
     private void proposeNewGame() {
-        final JOptionPane optionPane = new JOptionPane(
-                "Play again?",
-                JOptionPane.QUESTION_MESSAGE,
-                JOptionPane.YES_NO_OPTION);
-        optionPane.getMessageType();
     }
     //TODO news 02 - make method which starts new games
 }
