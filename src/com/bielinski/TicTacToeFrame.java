@@ -9,12 +9,15 @@ import java.util.List;
 
 public class TicTacToeFrame extends JFrame implements ActionListener {
 
-    private int counter;
+    private int counter = 0;
     private List<JButton> buttons = new ArrayList<>(); // tworzy listę buttonów
     private boolean[] availableButtons = new boolean[9];
-    private String[] board = new String[9];
-    private final String PLAYER_X_BUTTON = "X";
-    private final String PLAYER_O_BUTTON = "O";
+    //private String[] board = new String[9]; TODO delete if all will be ok
+    private int[] buttonsOwner = new int[9];
+    private int[][] winningButtonCombination = {{0, 0, 0}, {0, 0, 0}, {0, 0}}; //for AI
+    private final String PLAYER_X = "X";
+    private final String PLAYER_O = "O";
+    private boolean isPlayerXMoveNow;
 
     TicTacToeFrame(String title, int width) {
         super(title);
@@ -29,7 +32,7 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         }
         setLayout(new GridLayout(3, 3)); // ustawienie layoutu przycisków (najpierw pojawia się górny rząd od lewej do prawej, a potem niższe rzędy
         chooseGameMode();
-        counter = randomChooseFirstPlayer();
+        isPlayerXMoveNow = randomChooseFirstPlayer();
     }
 
     private void chooseGameMode() {
@@ -42,8 +45,7 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
                 null, possibleValues, possibleValues[0]);
         System.out.println(selectedValue); //TODO delete this sout (only for tests)
         if (selectedValue == null) {
-            setVisible(false); //can't see JFrame
-            dispose(); //destroy obcject
+            System.exit(0);
         }
         //TODO delete this after upgrade new modes
         else if (selectedValue.equals(MODE_PvAI) || selectedValue.equals(MODE_AIvAI)) {
@@ -52,52 +54,60 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         //TODO ends of code to delete
     }
 
-    private int randomChooseFirstPlayer() {
-        return ((Math.random() < 0.5) ? 0 : 1);
+    private boolean randomChooseFirstPlayer() {
+        return (Math.random() < 0.5);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource(); // pokazuje, który obiekt jest wciśnięty
-        if (counter % 2 == 0) button.setText(PLAYER_X_BUTTON); // pętla wyświetlająca naprzemiennie X i O
-        else button.setText(PLAYER_O_BUTTON);
+        System.out.println(buttons.indexOf(button)); //TODO delete
+        if (isPlayerXMoveNow) {
+            button.setText(PLAYER_X); // pętla wyświetlająca naprzemiennie X i O
+            buttonsOwner[buttons.indexOf(button)] = 1;
+        } else {
+            button.setText(PLAYER_O);
+            buttonsOwner[buttons.indexOf(button)] = -1;
+        }
         button.setEnabled(false); // blokuje przycisk wybrany przez gracza bądź AI
         if (counter > 4) {
             if (isDraw()) endsGame(false);
             if (isWinner()) endsGame(true);
         }
+        refreashWinningPossibility(buttons.indexOf(button), isPlayerXMoveNow);
+        isPlayerXMoveNow = !isPlayerXMoveNow;
         counter++;
     }
 
     private boolean isDraw() {
-        return isDraw(0, 1, 2) &&
-                isDraw(3, 4, 5) &&
-                isDraw(6, 7, 8) &&
-                isDraw(0, 3, 6) &&
-                isDraw(1, 4, 7) &&
-                isDraw(2, 5, 8) &&
-                isDraw(0, 4, 8) &&
-                isDraw(2, 4, 6);
+        return winningsCombinationClosed(0, 1, 2) &&
+                winningsCombinationClosed(3, 4, 5) &&
+                winningsCombinationClosed(6, 7, 8) &&
+                winningsCombinationClosed(0, 3, 6) &&
+                winningsCombinationClosed(1, 4, 7) &&
+                winningsCombinationClosed(2, 5, 8) &&
+                winningsCombinationClosed(0, 4, 8) &&
+                winningsCombinationClosed(2, 4, 6);
     }
 
-    private boolean isDraw(int i, int j, int k) {
+    private boolean winningsCombinationClosed(int i, int j, int k) {
         return (!buttons.get(i).getText().equals("") || !buttons.get(j).getText().equals("") || !buttons.get(k).getText().equals("")) &&
-                (buttons.get(i).getText().equals(PLAYER_X_BUTTON) || buttons.get(j).getText().equals(PLAYER_X_BUTTON) || buttons.get(k).getText().equals(PLAYER_X_BUTTON)) &&
-                (buttons.get(i).getText().equals(PLAYER_O_BUTTON) || buttons.get(j).getText().equals(PLAYER_O_BUTTON) || buttons.get(k).getText().equals(PLAYER_O_BUTTON));
+                (buttons.get(i).getText().equals(PLAYER_X) || buttons.get(j).getText().equals(PLAYER_X) || buttons.get(k).getText().equals(PLAYER_X)) &&
+                (buttons.get(i).getText().equals(PLAYER_O) || buttons.get(j).getText().equals(PLAYER_O) || buttons.get(k).getText().equals(PLAYER_O));
     }
 
     private boolean isWinner() {
-        return isWinner(0, 1, 2) ||
-                isWinner(3, 4, 5) ||
-                isWinner(6, 7, 8) ||
-                isWinner(0, 3, 6) ||
-                isWinner(1, 4, 7) ||
-                isWinner(2, 5, 8) ||
-                isWinner(0, 4, 8) ||
-                isWinner(2, 4, 6);
+        return winningsCombinationAchieve(0, 1, 2) ||
+                winningsCombinationAchieve(3, 4, 5) ||
+                winningsCombinationAchieve(6, 7, 8) ||
+                winningsCombinationAchieve(0, 3, 6) ||
+                winningsCombinationAchieve(1, 4, 7) ||
+                winningsCombinationAchieve(2, 5, 8) ||
+                winningsCombinationAchieve(0, 4, 8) ||
+                winningsCombinationAchieve(2, 4, 6);
     }
 
-    private boolean isWinner(int i, int j, int k) {
+    private boolean winningsCombinationAchieve(int i, int j, int k) {
         if (buttons.get(i).getText().equals(buttons.get(j).getText()) && buttons.get(i).getText().equals(buttons.get(k).getText()) && !buttons.get(i).getText().equals("")) {
             showWinnersButtons(i, j, k);
             return true;
@@ -117,8 +127,8 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         }
         if (isWinner) {
             String winner;
-            if (counter % 2 == 0) winner = PLAYER_X_BUTTON; // pętla wyświetlająca naprzemiennie X i O
-            else winner = PLAYER_O_BUTTON;
+            if (counter % 2 == 0) winner = PLAYER_X; // pętla wyświetlająca naprzemiennie X i O
+            else winner = PLAYER_O;
             JOptionPane.showMessageDialog(null, "Game over! The winner is " + winner);
         } else {
             JOptionPane.showMessageDialog(null, "Game tied!");
@@ -136,8 +146,58 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
                 button.setBackground(null);
             }
         } else {
-            setVisible(false); //can't see JFrame
-            dispose(); //destroy obcject
+            System.exit(0);
         }
+    }
+
+    //TODO AI
+
+    public int moveAI(String player, String opponent) { //TODO refactoring 03 optimisation
+        //check crutial moves
+        for (int i = 0; i < 9; i++) {
+            if (buttonsOwner[i] == 0) {
+                JButton button = buttons.get(i);
+                button.setText(PLAYER_O);
+                if (isWinner()) return i;
+                button.setText(PLAYER_X);
+                if (isWinner()) return i;
+                button.setText("");
+            }
+        }
+        //check actual best moves
+        for (int i = 0; i < 9; i++) {
+            if (buttonsOwner[i] == 0) {
+                if (canWinAfterThisMove(i)) return i;
+            }
+        }
+        //check initial and draws moves
+        if (buttonsOwner[4] == 0) return 4;
+        isPlayerXMoveNow = true; //TODO this must be after AI move
+        int rand = 4;
+        if (buttonsOwner[0] != 0 || buttonsOwner[2] != 0 || buttonsOwner[6] != 0 || buttonsOwner[8] != 0) {
+            while (rand == 4 && buttonsOwner[rand] != 0) {
+                rand = ((int) (Math.random() * 5)) * 2; //random choose buttons 0, 2, 6 or 8
+            }
+            return rand;
+        }
+        while (rand == 4 && buttonsOwner[rand] != 0) {
+            rand = (int) (Math.random() * 9); //random choose buttons 0, 2, 6 or 8
+        }
+        return rand;
+    }
+
+    private void refreashWinningPossibility(int newButton, boolean playerXtakenIt) {
+        int value = playerXtakenIt ? 1 : -1;
+        winningButtonCombination[0][newButton / 3] += value;
+        winningButtonCombination[1][newButton % 3] += value;
+        if (newButton % 4 == 0) winningButtonCombination[2][0] += value;
+        if (newButton == 2 || newButton == 4 || newButton == 6) winningButtonCombination[2][1] += value;
+    }
+
+    private boolean canWinAfterThisMove(int buttonNumber) {
+        int optionsWeight = winningButtonCombination[0][buttonNumber / 3] + winningButtonCombination[1][buttonNumber % 3];
+        if (buttonNumber % 4 == 0) optionsWeight += winningButtonCombination[2][0];
+        if (buttonNumber == 2 || buttonNumber == 4 || buttonNumber == 6) optionsWeight += winningButtonCombination[2][1];
+        return optionsWeight > 0;
     }
 }
