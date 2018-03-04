@@ -33,11 +33,23 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     }
 
     private void chooseGameMode() {
-        Object[] possibleValues = {"PvP", "PvAI", "AIvAI"};
+        final String MODE_PvP = "PvP";
+        final String MODE_PvAI = "PvAI";
+        final String MODE_AIvAI = "AIvAI";
+        Object[] possibleValues = {MODE_PvP, MODE_PvAI, MODE_AIvAI};
         Object selectedValue = JOptionPane.showInputDialog(null,
                 "Choose one", "Game Mode", JOptionPane.INFORMATION_MESSAGE,
                 null, possibleValues, possibleValues[0]);
-        System.out.println(selectedValue);
+        System.out.println(selectedValue); //TODO delete this sout (only for tests)
+        if (selectedValue == null) {
+            setVisible(false); //can't see JFrame
+            dispose(); //destroy obcject
+        }
+        //TODO delete this after upgrade new modes
+        else if (selectedValue.equals(MODE_PvAI) || selectedValue.equals(MODE_AIvAI)) {
+            JOptionPane.showMessageDialog(null, "Choosed mode is not suported yet. Starts " + MODE_PvP + " mode.");
+        }
+        //TODO ends of code to delete
     }
 
     private int randomChooseFirstPlayer() {
