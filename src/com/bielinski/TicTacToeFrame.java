@@ -13,6 +13,8 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     private List<JButton> buttons = new ArrayList<>(); // tworzy listę buttonów
     private boolean[] availableButtons = new boolean[9];
     private String[] board = new String[9];
+    private final String PLAYER_X_BUTTON = "X";
+    private final String PLAYER_O_BUTTON = "O";
 
     TicTacToeFrame(String title, int width) {
         super(title);
@@ -45,11 +47,31 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource(); // pokazuje, który obiekt jest wciśnięty
-        if (counter % 2 == 0) button.setText("X"); // pętla wyświetlająca naprzemiennie X i O
-        else button.setText("O");
+        if (counter % 2 == 0) button.setText(PLAYER_X_BUTTON); // pętla wyświetlająca naprzemiennie X i O
+        else button.setText(PLAYER_O_BUTTON);
         button.setEnabled(false); // blokuje przycisk wybrany przez gracza bądź AI
-        if (isWinner()) endsGame();
+        if (counter > 4) {
+            if (isDraw()) endsGame(false);
+            if (isWinner()) endsGame(true);
+        }
         counter++;
+    }
+
+    private boolean isDraw() {
+        return isDraw(0, 1, 2) &&
+                isDraw(3, 4, 5) &&
+                isDraw(6, 7, 8) &&
+                isDraw(0, 3, 6) &&
+                isDraw(1, 4, 7) &&
+                isDraw(2, 5, 8) &&
+                isDraw(0, 4, 8) &&
+                isDraw(2, 4, 6);
+    }
+
+    private boolean isDraw(int i, int j, int k) {
+        return (!buttons.get(i).getText().equals("") || !buttons.get(j).getText().equals("") || !buttons.get(k).getText().equals("")) &&
+                (buttons.get(i).getText().equals(PLAYER_X_BUTTON) || buttons.get(j).getText().equals(PLAYER_X_BUTTON) || buttons.get(k).getText().equals(PLAYER_X_BUTTON)) &&
+                (buttons.get(i).getText().equals(PLAYER_O_BUTTON) || buttons.get(j).getText().equals(PLAYER_O_BUTTON) || buttons.get(k).getText().equals(PLAYER_O_BUTTON));
     }
 
     private boolean isWinner() {
@@ -77,14 +99,18 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         buttons.get(k).setBackground(Color.green);
     }
 
-    private void endsGame() {
-        char winner;
-        if (counter % 2 == 0) winner = 'X'; // pętla wyświetlająca naprzemiennie X i O
-        else winner = 'O';
+    private void endsGame(boolean isWinner) {
         for (JButton button : buttons) {
             button.setEnabled(false);
         }
-        JOptionPane.showMessageDialog(null, "Game over! The winner is " + winner);
+        if (isWinner) {
+            String winner;
+            if (counter % 2 == 0) winner = PLAYER_X_BUTTON; // pętla wyświetlająca naprzemiennie X i O
+            else winner = PLAYER_O_BUTTON;
+            JOptionPane.showMessageDialog(null, "Game over! The winner is " + winner);
+        } else {
+            JOptionPane.showMessageDialog(null, "Game tied!");
+        }
         proposeNewGame();
     }
 
