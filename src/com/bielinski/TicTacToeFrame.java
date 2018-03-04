@@ -14,7 +14,7 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     private boolean[] availableButtons = new boolean[9];
     private String[] board = new String[9];
 
-    public TicTacToeFrame(String title, int width) {
+    TicTacToeFrame(String title, int width) {
         super(title);
         setSize(width, width); // ustawienie wymiarów okna (metoda JFrame)
         setVisible(true); // ustawienie widoczności (metoda JFrame)
@@ -26,7 +26,16 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
             availableButtons[i] = true;
         }
         setLayout(new GridLayout(3, 3)); // ustawienie layoutu przycisków (najpierw pojawia się górny rząd od lewej do prawej, a potem niższe rzędy
+        chooseGameMode();
         counter = randomChooseFirstPlayer();
+    }
+
+    private void chooseGameMode() {
+        Object[] possibleValues = {"PvP", "PvAI", "AIvAI"};
+        Object selectedValue = JOptionPane.showInputDialog(null,
+                "Choose one", "Game Mode", JOptionPane.INFORMATION_MESSAGE,
+                null, possibleValues, possibleValues[0]);
+        System.out.println(selectedValue);
     }
 
     private int randomChooseFirstPlayer() {
@@ -35,18 +44,11 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (counter % 2 == 0) { // pętla wyświetlająca naprzemiennie X i O
-            JButton button = (JButton) e.getSource(); // pokazuje, który obiekt jest wciśnięty
-            button.setText("X");
-            button.setEnabled(false); // blokuje przycisk wybrany przez gracza bądź AI
-        } else {
-            JButton button = (JButton) e.getSource();
-            button.setText("O");
-            button.setEnabled(false);
-        }
-        if (isWinner()) {
-            endsGame();
-        }
+        JButton button = (JButton) e.getSource(); // pokazuje, który obiekt jest wciśnięty
+        if (counter % 2 == 0) button.setText("X"); // pętla wyświetlająca naprzemiennie X i O
+        else button.setText("O");
+        button.setEnabled(false); // blokuje przycisk wybrany przez gracza bądź AI
+        if (isWinner()) endsGame();
         counter++;
     }
 
@@ -77,12 +79,9 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
 
     private void endsGame() {
         char winner;
-        if (counter % 2 == 0) // pętla wyświetlająca naprzemiennie X i O
-            winner = 'X';
-        else
-            winner = 'O';
-        for (JButton button : buttons
-                ) {
+        if (counter % 2 == 0) winner = 'X'; // pętla wyświetlająca naprzemiennie X i O
+        else winner = 'O';
+        for (JButton button : buttons) {
             button.setEnabled(false);
         }
         JOptionPane.showMessageDialog(null, "Game over! The winner is " + winner);
@@ -92,17 +91,15 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     private void proposeNewGame() {
         int decision = JOptionPane.showConfirmDialog(null,
                 "Play again?", "GAME ENDS", JOptionPane.YES_NO_OPTION);
-        System.out.println(decision); //TODO only for test, delete after it
         if (decision == 0) {
-            for (JButton button : buttons
-                    ) {
+            for (JButton button : buttons) {
                 button.setEnabled(true);
                 button.setText("");
                 button.setBackground(null);
             }
-        }
-        else {
+        } else {
             setVisible(false); //can't see JFrame
-            dispose();} //destroy obcject
+            dispose(); //destroy obcject
+        }
     }
 }
