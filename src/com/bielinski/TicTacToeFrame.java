@@ -43,7 +43,7 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         Object[] possibleValues = {MODE_PvP, MODE_PvAI, MODE_AIvAI};
         Object selectedValue = JOptionPane.showInputDialog(null,
                 "Choose one", "Game Mode", JOptionPane.INFORMATION_MESSAGE,
-                null, possibleValues, possibleValues[0]);
+                null, possibleValues, possibleValues[1]);
         if (selectedValue == null) {
             System.exit(0);
         } else if (selectedValue.equals(MODE_PvAI)) {
@@ -74,15 +74,15 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     }
 
     private void afterMove(int buttonNumber) {
+        counter++;
         buttonsOwner[buttonNumber] = isPlayerXMoveNow ? 1 : -1;
         buttons.get(buttonNumber).setEnabled(false); // blokuje przycisk wybrany przez gracza bądź AI
         if (counter > 4) {
             if (isDraw()) endsGame(false);
-            if (isWinner()) endsGame(true);
+            if (isWinner(false)) endsGame(true);
         }
         refreashWinningPossibility(buttonNumber, isPlayerXMoveNow);
         isPlayerXMoveNow = !isPlayerXMoveNow;
-        counter++;
     }
 
     private boolean isDraw() {
@@ -102,20 +102,20 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
                 (buttons.get(i).getText().equals(PLAYER_O) || buttons.get(j).getText().equals(PLAYER_O) || buttons.get(k).getText().equals(PLAYER_O));
     }
 
-    private boolean isWinner() {
-        return winningsCombinationAchieve(0, 1, 2) ||
-                winningsCombinationAchieve(3, 4, 5) ||
-                winningsCombinationAchieve(6, 7, 8) ||
-                winningsCombinationAchieve(0, 3, 6) ||
-                winningsCombinationAchieve(1, 4, 7) ||
-                winningsCombinationAchieve(2, 5, 8) ||
-                winningsCombinationAchieve(0, 4, 8) ||
-                winningsCombinationAchieve(2, 4, 6);
+    private boolean isWinner(boolean itsForAI) {
+        return winningsCombinationAchieve(0, 1, 2, itsForAI) ||
+                winningsCombinationAchieve(3, 4, 5, itsForAI) ||
+                winningsCombinationAchieve(6, 7, 8, itsForAI) ||
+                winningsCombinationAchieve(0, 3, 6, itsForAI) ||
+                winningsCombinationAchieve(1, 4, 7, itsForAI) ||
+                winningsCombinationAchieve(2, 5, 8, itsForAI) ||
+                winningsCombinationAchieve(0, 4, 8, itsForAI) ||
+                winningsCombinationAchieve(2, 4, 6, itsForAI);
     }
 
-    private boolean winningsCombinationAchieve(int i, int j, int k) {
+    private boolean winningsCombinationAchieve(int i, int j, int k, boolean itsForAI) {
         if (buttons.get(i).getText().equals(buttons.get(j).getText()) && buttons.get(i).getText().equals(buttons.get(k).getText()) && !buttons.get(i).getText().equals("")) {
-            showWinnersButtons(i, j, k);
+            if (!itsForAI) showWinnersButtons(i, j, k);
             return true;
         }
         return false;
@@ -167,20 +167,22 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
 //        }
 //    }
 
-    //TODO AI
+    //TODO AI - it's still take wrong moves...
 
     private void moveAI(String playerAI, String opponent) {
-//        try {
-//            Thread.sleep(200);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         JButton button = buttons.get(algorithmAI(playerAI, opponent));
         button.setText(playerAI);
         afterMove(buttons.indexOf(button));
     }
 
     private int algorithmAI(String player, String opponent) {
+        //check initial if AI starts game
+        if (buttonsOwner[4] == 0) return 4;
         //check crucial moves
         if (counter > 2) {
             for (int i = 0; i < 9; i++) {
@@ -199,17 +201,21 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
             }
         }
         //check initial and draws moves
-        if (buttonsOwner[4] == 0) return 4;
-        int rand = 4;
+        int rand;
         if (buttonsOwner[0] == 0 || buttonsOwner[2] == 0 || buttonsOwner[6] == 0 || buttonsOwner[8] == 0) {
-            while (rand == 4 && buttonsOwner[rand] != 0) {
-                rand = ((int) (Math.random() * 5)) * 2; //random choose buttons 0, 2, 6 or 8
-            }
-            return rand;
+            return buttonRandomised(2);
         }
-        while (buttonsOwner[rand] == 0) {
-            rand = (int) (Math.random() * 9); //random choose buttons
+        return buttonRandomised(1);
+    }
+
+    private int buttonRandomised(int move){
+        int rand;
+        List<Integer> buttonsAvailableIndex = new ArrayList<>();
+        for (int i = 0; i < buttonsOwner.length; i+=move) {
+            if (buttonsOwner[i] == 0) buttonsAvailableIndex.add(i);
         }
+        rand = (int) (Math.random() * buttonsAvailableIndex.size()); //random choose buttons
+        rand = buttonsAvailableIndex.get(rand);
         return rand;
     }
 
@@ -222,10 +228,11 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     }
 
     private boolean canWinAfterThisMove(int buttonNumber, boolean forPlayerX) {
+        int betterButtons = forPlayerX ? 1 : -1;
         int optionsWeight = winningButtonCombination[buttonNumber / 3] + winningButtonCombination[buttonNumber % 3 + 3];
-        if (buttonNumber % 4 == 0) optionsWeight += winningButtonCombination[6];
+        if (buttonNumber % 4 == 0) optionsWeight += winningButtonCombination[6] + betterButtons;
         if (buttonNumber == 2 || buttonNumber == 4 || buttonNumber == 6)
-            optionsWeight += winningButtonCombination[7];
+            optionsWeight += winningButtonCombination[7] + betterButtons;
         if (forPlayerX) return optionsWeight > 0;
         else return optionsWeight < 0;
     }
@@ -233,8 +240,9 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     private boolean checkCrucialSituationForAI(String checkingPlayer, int i) {
         JButton button = buttons.get(i);
         button.setText(checkingPlayer);
-        button.setText("");
-        return isWinner();
+        boolean checking = isWinner(true);
+        buttons.get(i).setText("");
+        return checking;
     }
     //TODO problems: -new games problems: player is O (should be X); AI moves 2 times; -AI checking crucial change button color at green (only winning situation should do that)
 }
