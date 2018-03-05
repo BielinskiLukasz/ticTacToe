@@ -10,7 +10,7 @@ import java.util.List;
 public class TicTacToeFrame extends JFrame implements ActionListener {
 
     private int counter = 0;
-    private List<JButton> buttons = new ArrayList<>(); // tworzy listę buttonów
+    private List<JButton> buttons = new ArrayList<>(); // button list initiation
     private boolean[] availableButtons = new boolean[9];
     //private String[] board = new String[9]; TODO delete if all will be ok
     private int[] buttonsOwner = new int[9];
@@ -18,20 +18,21 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     private final String PLAYER_X = "X";
     private final String PLAYER_O = "O";
     private boolean isPlayerXMoveNow;
-    private boolean playerOIsAI;
+    private boolean playerOIsAI = false;
+    private boolean newGame = false;
 
     TicTacToeFrame(String title, int width) {
         super(title);
-        setSize(width, width); // ustawienie wymiarów okna (metoda JFrame)
-        setVisible(true); // ustawienie widoczności (metoda JFrame)
+        setSize(width, width); // window size set
+        setVisible(true); // window visible set
         for (int i = 0; i < 9; i++) {
             JButton jButton = new JButton("");
-            jButton.addActionListener(this); // "nasłuchuje kliknięcie"
-            add(jButton); // dodaje nowy button
-            buttons.add(jButton); // dodaje button do listy buttonów
+            jButton.addActionListener(this); // "click" listener
+            add(jButton); // add new button
+            buttons.add(jButton); // add button to button list
             availableButtons[i] = true;
         }
-        setLayout(new GridLayout(3, 3)); // ustawienie layoutu przycisków (najpierw pojawia się górny rząd od lewej do prawej, a potem niższe rzędy
+        setLayout(new GridLayout(3, 3)); // set buttons layout (the upper row from left to right first appears, followed by the lower rows)
         isPlayerXMoveNow = randomChooseFirstPlayer();
         chooseGameMode();
     }
@@ -50,10 +51,14 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
             playerOIsAI = true;
             if (!isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
         } else if (selectedValue.equals(MODE_AIvAI)) {
+            playerOIsAI = true;
             for (int i = 0; i < 9; i++) {
                 if (isPlayerXMoveNow) moveAI(PLAYER_X, PLAYER_O);
                 else moveAI(PLAYER_O, PLAYER_X);
             }
+        } else {
+            if (isPlayerXMoveNow) JOptionPane.showMessageDialog(null, "Player X start!");
+            else JOptionPane.showMessageDialog(null, "Player O start!");
         }
     }
 
@@ -63,26 +68,28 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JButton button = (JButton) e.getSource(); // pokazuje, który obiekt jest wciśnięty
-        if (isPlayerXMoveNow) {
-            button.setText(PLAYER_X); // pętla zmieniająca gracza naprzemiennie (X i O)
-        } else {
-            button.setText(PLAYER_O);
-        }
+        JButton button = (JButton) e.getSource(); // show with button was clicked
+        if (isPlayerXMoveNow) button.setText(PLAYER_X); // change players condition
+        else button.setText(PLAYER_O);
         afterMove(buttons.indexOf(button));
-        if (playerOIsAI && !isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
+        if (!newGame) {
+            if (playerOIsAI && !isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
+        }
     }
 
     private void afterMove(int buttonNumber) {
         counter++;
         buttonsOwner[buttonNumber] = isPlayerXMoveNow ? 1 : -1;
-        buttons.get(buttonNumber).setEnabled(false); // blokuje przycisk wybrany przez gracza bądź AI
+        buttons.get(buttonNumber).setEnabled(false); // enable button chooses by player or AI
         if (counter > 4) {
             if (isDraw()) endsGame(false);
             if (isWinner(false)) endsGame(true);
         }
-        refreashWinningPossibility(buttonNumber, isPlayerXMoveNow);
-        isPlayerXMoveNow = !isPlayerXMoveNow;
+        if (!newGame) {
+            refreashWinningPossibility(buttonNumber, isPlayerXMoveNow);
+            isPlayerXMoveNow = !isPlayerXMoveNow;
+        }
+        newGame = false;
     }
 
     private boolean isDraw() {
@@ -133,41 +140,44 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         }
         if (isWinner) {
             String winner;
-            if (counter % 2 == 0) winner = PLAYER_X; // pętla wyświetlająca naprzemiennie X i O
+            if (isPlayerXMoveNow) winner = PLAYER_X;
             else winner = PLAYER_O;
             JOptionPane.showMessageDialog(null, "Game over! The winner is " + winner);
         } else {
             JOptionPane.showMessageDialog(null, "Game tied!");
         }
-//        proposeNewGame(); TODO Repair this
-        System.exit(0); //TODO after don't repait proposeNewGame() code (AI moves after game ends and this is problem of this method code...
+        proposeNewGame(); //TODO Repair this
+//        System.exit(0); //TODO after don't repait proposeNewGame() code (AI moves after game ends and this is problem of this method code...
     }
 
     //TODO repair proposeNewGame() code
-//    private void proposeNewGame() {
-//        int decision = JOptionPane.showConfirmDialog(null,
-//                "Play again?", "GAME ENDS", JOptionPane.YES_NO_OPTION);
-//        if (decision == 0) {
-//            for (JButton button : buttons) {
-//                button.setEnabled(true);
-//                button.setText("");
-//                button.setBackground(null);
-//            }
-//            isPlayerXMoveNow = randomChooseFirstPlayer();
-//            for (int i = 0; i < winningButtonCombination.length; i++) {
-//                winningButtonCombination[i] = 0;
-//            }
-//            for (int i = 0; i < buttonsOwner.length; i++) {
-//                buttonsOwner[i] = 0;
-//            }
-//            counter = 0;
-//            if (!isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
-//        } else {
-//            System.exit(0);
-//        }
-//    }
-
-    //TODO AI - it's still take wrong moves...
+    private void proposeNewGame() {
+        int decision = JOptionPane.showConfirmDialog(null,
+                "Play again?", "GAME ENDS", JOptionPane.YES_NO_OPTION);
+        if (decision == 0) {
+            newGame = true;
+            for (JButton button : buttons) {
+                button.setEnabled(true);
+                button.setText("");
+                button.setBackground(null);
+            }
+            isPlayerXMoveNow = randomChooseFirstPlayer();
+            if (!playerOIsAI) {
+                if (isPlayerXMoveNow) JOptionPane.showMessageDialog(null, "Player X start!");
+                else JOptionPane.showMessageDialog(null, "Player O start!");
+            }
+            for (int i = 0; i < winningButtonCombination.length; i++) {
+                winningButtonCombination[i] = 0;
+            }
+            for (int i = 0; i < buttonsOwner.length; i++) {
+                buttonsOwner[i] = 0;
+            }
+            counter = 0;
+            if (!isPlayerXMoveNow && playerOIsAI) moveAI(PLAYER_O, PLAYER_X);
+        } else {
+            System.exit(0);
+        }
+    }
 
     private void moveAI(String playerAI, String opponent) {
         try {
@@ -201,17 +211,16 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
             }
         }
         //check initial and draws moves
-        int rand;
         if (buttonsOwner[0] == 0 || buttonsOwner[2] == 0 || buttonsOwner[6] == 0 || buttonsOwner[8] == 0) {
             return buttonRandomised(2);
         }
         return buttonRandomised(1);
     }
 
-    private int buttonRandomised(int move){
+    private int buttonRandomised(int move) {
         int rand;
         List<Integer> buttonsAvailableIndex = new ArrayList<>();
-        for (int i = 0; i < buttonsOwner.length; i+=move) {
+        for (int i = 0; i < buttonsOwner.length; i += move) {
             if (buttonsOwner[i] == 0) buttonsAvailableIndex.add(i);
         }
         rand = (int) (Math.random() * buttonsAvailableIndex.size()); //random choose buttons
