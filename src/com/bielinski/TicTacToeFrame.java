@@ -12,14 +12,13 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     private int counter = 0;
     private List<JButton> buttons = new ArrayList<>(); // button list initiation
     private boolean[] availableButtons = new boolean[9];
-    //private String[] board = new String[9]; TODO delete if all will be ok
     private int[] buttonsOwner = new int[9];
     private int[] winningButtonCombination = {0, 0, 0, 0, 0, 0, 0, 0}; //for AI
     private final String PLAYER_X = "X";
     private final String PLAYER_O = "O";
     private boolean isPlayerXMoveNow;
     private boolean playerOIsAI = false;
-    private boolean newGame = false;
+    private boolean gameEnds = false;
 
     TicTacToeFrame(String title, int width) {
         super(title);
@@ -72,8 +71,10 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         if (isPlayerXMoveNow) button.setText(PLAYER_X); // change players condition
         else button.setText(PLAYER_O);
         afterMove(buttons.indexOf(button));
-        if (!newGame) {
-            if (playerOIsAI && !isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
+        if (playerOIsAI && !isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
+        if (gameEnds) {
+            gameEnds = false;
+            proposeNewGame();
         }
     }
 
@@ -82,14 +83,17 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         buttonsOwner[buttonNumber] = isPlayerXMoveNow ? 1 : -1;
         buttons.get(buttonNumber).setEnabled(false); // enable button chooses by player or AI
         if (counter > 4) {
-            if (isDraw()) endsGame(false);
-            if (isWinner(false)) endsGame(true);
+            if (isDraw()) {
+                gameEnds = true;
+                endsGame(false);
+            }
+            if (isWinner(false)) {
+                gameEnds = true;
+                endsGame(true);
+            }
         }
-        if (!newGame) {
-            refreashWinningPossibility(buttonNumber, isPlayerXMoveNow);
-            isPlayerXMoveNow = !isPlayerXMoveNow;
-        }
-        newGame = false;
+        refreashWinningPossibility(buttonNumber, isPlayerXMoveNow);
+        isPlayerXMoveNow = !isPlayerXMoveNow;
     }
 
     private boolean isDraw() {
@@ -122,7 +126,9 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
 
     private boolean winningsCombinationAchieve(int i, int j, int k, boolean itsForAI) {
         if (buttons.get(i).getText().equals(buttons.get(j).getText()) && buttons.get(i).getText().equals(buttons.get(k).getText()) && !buttons.get(i).getText().equals("")) {
-            if (!itsForAI) showWinnersButtons(i, j, k);
+            if (!itsForAI) {
+                showWinnersButtons(i, j, k);
+            }
             return true;
         }
         return false;
@@ -146,16 +152,12 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         } else {
             JOptionPane.showMessageDialog(null, "Game tied!");
         }
-        proposeNewGame(); //TODO Repair this
-//        System.exit(0); //TODO after don't repait proposeNewGame() code (AI moves after game ends and this is problem of this method code...
     }
 
-    //TODO repair proposeNewGame() code
     private void proposeNewGame() {
         int decision = JOptionPane.showConfirmDialog(null,
                 "Play again?", "GAME ENDS", JOptionPane.YES_NO_OPTION);
         if (decision == 0) {
-            newGame = true;
             for (JButton button : buttons) {
                 button.setEnabled(true);
                 button.setText("");
@@ -253,6 +255,5 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         buttons.get(i).setText("");
         return checking;
     }
-    //TODO problems: -new games problems: player is O (should be X); AI moves 2 times; -AI checking crucial change button color at green (only winning situation should do that)
 }
 
