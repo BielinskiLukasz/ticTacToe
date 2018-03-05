@@ -14,10 +14,11 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     private boolean[] availableButtons = new boolean[9];
     //private String[] board = new String[9]; TODO delete if all will be ok
     private int[] buttonsOwner = new int[9];
-    private int[][] winningButtonCombination = {{0, 0, 0}, {0, 0, 0}, {0, 0}}; //for AI
+    private int[] winningButtonCombination = {0, 0, 0, 0, 0, 0, 0, 0}; //for AI
     private final String PLAYER_X = "X";
     private final String PLAYER_O = "O";
     private boolean isPlayerXMoveNow;
+    private boolean playerOIsAI;
 
     TicTacToeFrame(String title, int width) {
         super(title);
@@ -31,8 +32,9 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
             availableButtons[i] = true;
         }
         setLayout(new GridLayout(3, 3)); // ustawienie layoutu przycisków (najpierw pojawia się górny rząd od lewej do prawej, a potem niższe rzędy
-        chooseGameMode();
         isPlayerXMoveNow = randomChooseFirstPlayer();
+        System.out.println(isPlayerXMoveNow); //TODO delete this after tests
+        chooseGameMode();
     }
 
     private void chooseGameMode() {
@@ -43,15 +45,17 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         Object selectedValue = JOptionPane.showInputDialog(null,
                 "Choose one", "Game Mode", JOptionPane.INFORMATION_MESSAGE,
                 null, possibleValues, possibleValues[0]);
-        System.out.println(selectedValue); //TODO delete this sout (only for tests)
         if (selectedValue == null) {
             System.exit(0);
+        } else if (selectedValue.equals(MODE_PvAI)) {
+            playerOIsAI = true;
+            if (!isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
+        } else if (selectedValue.equals(MODE_AIvAI)) {
+            for (int i = 0; i < 9; i++) {
+                if (isPlayerXMoveNow) moveAI(PLAYER_X, PLAYER_O);
+                else moveAI(PLAYER_O, PLAYER_X);
+            }
         }
-        //TODO delete this after upgrade new modes
-        else if (selectedValue.equals(MODE_PvAI) || selectedValue.equals(MODE_AIvAI)) {
-            JOptionPane.showMessageDialog(null, "Choosed mode is not suported yet. Starts " + MODE_PvP + " mode.");
-        }
-        //TODO ends of code to delete
     }
 
     private boolean randomChooseFirstPlayer() {
@@ -61,20 +65,23 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource(); // pokazuje, który obiekt jest wciśnięty
-        System.out.println(buttons.indexOf(button)); //TODO delete
         if (isPlayerXMoveNow) {
-            button.setText(PLAYER_X); // pętla wyświetlająca naprzemiennie X i O
-            buttonsOwner[buttons.indexOf(button)] = 1;
+            button.setText(PLAYER_X); // pętla zmieniająca gracza naprzemiennie (X i O)
         } else {
             button.setText(PLAYER_O);
-            buttonsOwner[buttons.indexOf(button)] = -1;
         }
-        button.setEnabled(false); // blokuje przycisk wybrany przez gracza bądź AI
+        afterMove(buttons.indexOf(button));
+        if (playerOIsAI) moveAI(PLAYER_O, PLAYER_X);
+    }
+
+    private void afterMove(int buttonNumber) {
+        buttonsOwner[buttonNumber] = isPlayerXMoveNow ? 1 : -1;
+        buttons.get(buttonNumber).setEnabled(false); // blokuje przycisk wybrany przez gracza bądź AI
         if (counter > 4) {
             if (isDraw()) endsGame(false);
             if (isWinner()) endsGame(true);
         }
-        refreashWinningPossibility(buttons.indexOf(button), isPlayerXMoveNow);
+        refreashWinningPossibility(buttonNumber, isPlayerXMoveNow);
         isPlayerXMoveNow = !isPlayerXMoveNow;
         counter++;
     }
@@ -145,6 +152,15 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
                 button.setText("");
                 button.setBackground(null);
             }
+            isPlayerXMoveNow = randomChooseFirstPlayer();
+            System.out.println(isPlayerXMoveNow); //TODO delete this after tests
+            for (int i = 0; i < winningButtonCombination.length; i++) {
+                winningButtonCombination[i] = 0;
+            }
+            for (int i = 0; i < buttonsOwner.length; i++) {
+                buttonsOwner[i] = 0;
+            }
+            if (!isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
         } else {
             System.exit(0);
         }
@@ -152,14 +168,25 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
 
     //TODO AI
 
-    public int moveAI(String player, String opponent) { //TODO refactoring 03 optimisation
-        //check crutial moves
+    private void moveAI(String playerAI, String opponent) {
+//        try {
+//            Thread.sleep(200);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        JButton button = buttons.get(algorithmAI(playerAI, opponent));
+        button.setText(playerAI);
+        afterMove(buttons.indexOf(button));
+    }
+
+    private int algorithmAI(String player, String opponent) { //TODO refactoring 03 optimisation
+        //check crucial moves
         for (int i = 0; i < 9; i++) {
             if (buttonsOwner[i] == 0) {
                 JButton button = buttons.get(i);
-                button.setText(PLAYER_O);
+                button.setText(player);
                 if (isWinner()) return i;
-                button.setText(PLAYER_X);
+                button.setText(opponent);
                 if (isWinner()) return i;
                 button.setText("");
             }
@@ -167,12 +194,11 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         //check actual best moves
         for (int i = 0; i < 9; i++) {
             if (buttonsOwner[i] == 0) {
-                if (canWinAfterThisMove(i)) return i;
+                if (canWinAfterThisMove(i, isPlayerXMoveNow)) return i;
             }
         }
         //check initial and draws moves
         if (buttonsOwner[4] == 0) return 4;
-        isPlayerXMoveNow = true; //TODO this must be after AI move
         int rand = 4;
         if (buttonsOwner[0] != 0 || buttonsOwner[2] != 0 || buttonsOwner[6] != 0 || buttonsOwner[8] != 0) {
             while (rand == 4 && buttonsOwner[rand] != 0) {
@@ -188,16 +214,20 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
 
     private void refreashWinningPossibility(int newButton, boolean playerXtakenIt) {
         int value = playerXtakenIt ? 1 : -1;
-        winningButtonCombination[0][newButton / 3] += value;
-        winningButtonCombination[1][newButton % 3] += value;
-        if (newButton % 4 == 0) winningButtonCombination[2][0] += value;
-        if (newButton == 2 || newButton == 4 || newButton == 6) winningButtonCombination[2][1] += value;
+        winningButtonCombination[newButton / 3] += value;
+        winningButtonCombination[newButton % 3 + 3] += value;
+        if (newButton % 4 == 0) winningButtonCombination[6] += value;
+        if (newButton == 2 || newButton == 4 || newButton == 6) winningButtonCombination[7] += value;
     }
 
-    private boolean canWinAfterThisMove(int buttonNumber) {
-        int optionsWeight = winningButtonCombination[0][buttonNumber / 3] + winningButtonCombination[1][buttonNumber % 3];
-        if (buttonNumber % 4 == 0) optionsWeight += winningButtonCombination[2][0];
-        if (buttonNumber == 2 || buttonNumber == 4 || buttonNumber == 6) optionsWeight += winningButtonCombination[2][1];
-        return optionsWeight > 0;
+    private boolean canWinAfterThisMove(int buttonNumber, boolean forPlayerX) {
+        int optionsWeight = winningButtonCombination[buttonNumber / 3] + winningButtonCombination[buttonNumber % 3 + 3];
+        if (buttonNumber % 4 == 0) optionsWeight += winningButtonCombination[6];
+        if (buttonNumber == 2 || buttonNumber == 4 || buttonNumber == 6)
+            optionsWeight += winningButtonCombination[7];
+        if (forPlayerX) return optionsWeight > 0;
+        else return optionsWeight < 0;
     }
 }
+
+//TODO problems: -new games problems: player is O (should be X); AI moves 2 times; -AI checking crucial change button color at green (only winning situation should do that)
