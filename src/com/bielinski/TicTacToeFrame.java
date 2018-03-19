@@ -27,7 +27,7 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         for (int i = 0; i < 9; i++) {
             JButton jButton = new JButton("");
             jButton.addActionListener(this); // "click" listener
-            jButton.setFont(new Font("Arial", Font.PLAIN, this.getSize().height/6)); // set font size
+            jButton.setFont(new Font("Arial", Font.PLAIN, this.getSize().height / 6)); // set font size
             add(jButton); // add new button
             buttons.add(jButton); // add button to button list
             availableButtons[i] = true;
@@ -69,10 +69,13 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource(); // show with button was clicked
-        if (isPlayerXMoveNow) button.setText(PLAYER_X); // change players condition
-        else button.setText(PLAYER_O);
+        if (isPlayerXMoveNow) {
+            button.setText(PLAYER_X); // change players condition
+        } else {
+            button.setText(PLAYER_O);
+        }
         afterMove(buttons.indexOf(button));
-        if (playerOIsAI && !isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
+        if (playerOIsAI && !isPlayerXMoveNow && !gameEnds) moveAI(PLAYER_O, PLAYER_X);
         if (gameEnds) {
             gameEnds = false;
             proposeNewGame();
