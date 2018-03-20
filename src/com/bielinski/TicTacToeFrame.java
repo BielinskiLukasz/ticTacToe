@@ -70,13 +70,8 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource(); // show with button was clicked
-        if (isPlayerXMoveNow) {
-            button.setText(PLAYER_X); // change players condition
-            button.setForeground(Color.BLUE);
-        } else {
-            button.setText(PLAYER_O);
-            UIManager.getDefaults().put("Button.disabledText", Color.RED);
-        }
+        if (isPlayerXMoveNow) button.setText(PLAYER_X); // change players condition
+        else button.setText(PLAYER_O);
         afterMove(buttons.indexOf(button));
         if (playerOIsAI && !isPlayerXMoveNow && !gameEnds) moveAI(PLAYER_O, PLAYER_X);
         if (gameEnds) {
@@ -215,7 +210,7 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         }
         //check actual best moves
         if ((buttonsOwner[0] == buttonsOwner[8] && buttons.get(0).getText().equals(opponent)) || buttonsOwner[2] == buttonsOwner[6] && buttons.get(2).getText().equals(opponent)) {
-            return buttonRandomised(2,1);
+            return buttonRandomised(2, 1);
         }
         for (int i = 0; i < 9; i++) {
             if (buttonsOwner[i] == 0) {
@@ -224,9 +219,9 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         }
         //check initial and draws moves
         if (buttonsOwner[0] == 0 || buttonsOwner[2] == 0 || buttonsOwner[6] == 0 || buttonsOwner[8] == 0) {
-            return buttonRandomised(2,0);
+            return buttonRandomised(2, 0);
         }
-        return buttonRandomised(1,0);
+        return buttonRandomised(1, 0);
     }
 
     private int buttonRandomised(int move, int start) {
