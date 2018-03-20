@@ -22,6 +22,7 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
 
     TicTacToeFrame(String title, int width) {
         super(title);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(width, width); // window size set
         setVisible(true); // window visible set
         for (int i = 0; i < 9; i++) {
@@ -71,8 +72,10 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource(); // show with button was clicked
         if (isPlayerXMoveNow) {
             button.setText(PLAYER_X); // change players condition
+            button.setForeground(Color.BLUE);
         } else {
             button.setText(PLAYER_O);
+            UIManager.getDefaults().put("Button.disabledText", Color.RED);
         }
         afterMove(buttons.indexOf(button));
         if (playerOIsAI && !isPlayerXMoveNow && !gameEnds) moveAI(PLAYER_O, PLAYER_X);
@@ -211,6 +214,9 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
             }
         }
         //check actual best moves
+        if ((buttonsOwner[0] == buttonsOwner[8] && buttons.get(0).getText().equals(opponent)) || buttonsOwner[2] == buttonsOwner[6] && buttons.get(2).getText().equals(opponent)) {
+            return buttonRandomised(2,1);
+        }
         for (int i = 0; i < 9; i++) {
             if (buttonsOwner[i] == 0) {
                 if (canWinAfterThisMove(i, isPlayerXMoveNow)) return i;
@@ -218,15 +224,15 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         }
         //check initial and draws moves
         if (buttonsOwner[0] == 0 || buttonsOwner[2] == 0 || buttonsOwner[6] == 0 || buttonsOwner[8] == 0) {
-            return buttonRandomised(2);
+            return buttonRandomised(2,0);
         }
-        return buttonRandomised(1);
+        return buttonRandomised(1,0);
     }
 
-    private int buttonRandomised(int move) {
+    private int buttonRandomised(int move, int start) {
         int rand;
         List<Integer> buttonsAvailableIndex = new ArrayList<>();
-        for (int i = 0; i < buttonsOwner.length; i += move) {
+        for (int i = start; i < buttonsOwner.length; i += move) {
             if (buttonsOwner[i] == 0) buttonsAvailableIndex.add(i);
         }
         rand = (int) (Math.random() * buttonsAvailableIndex.size()); //random choose buttons
@@ -248,8 +254,13 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
         if (buttonNumber % 4 == 0) optionsWeight += winningButtonCombination[6] + betterButtons;
         if (buttonNumber == 2 || buttonNumber == 4 || buttonNumber == 6)
             optionsWeight += winningButtonCombination[7] + betterButtons;
-        if (forPlayerX) return optionsWeight > 0;
-        else return optionsWeight < 0;
+        if (counter < 5) {
+            if (forPlayerX) return optionsWeight > 0;
+            else return optionsWeight < 0;
+        } else {
+            if (forPlayerX) return optionsWeight >= 0;
+            else return optionsWeight <= 0;
+        }
     }
 
     private boolean checkCrucialSituationForAI(String checkingPlayer, int i) {
