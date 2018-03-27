@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class TicTacToeFrame extends JFrame implements ActionListener {
 
@@ -53,9 +54,17 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
             if (!isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
         } else if (selectedValue.equals(MODE_AIvAI)) {
             playerOIsAI = true;
-            for (int i = 0; i < 9; i++) {
-                if (isPlayerXMoveNow) moveAI(PLAYER_X, PLAYER_O);
-                else moveAI(PLAYER_O, PLAYER_X);
+            while (true) { //TODO this true should be changed by proposeNweGame()
+                while (!gameEnds) {
+                    if (isPlayerXMoveNow) {
+                        moveAI(PLAYER_X, PLAYER_O);
+                        this.revalidate(); //TODO don't works
+                    } else {
+                        moveAI(PLAYER_O, PLAYER_X);
+                        this.repaint(1); //TODO don't works
+                    }
+                }
+                proposeNewGame(); //TODO don't works too (problems in new games, make some options with exit from while
             }
         } else {
             if (isPlayerXMoveNow) JOptionPane.showMessageDialog(null, "Player X start!");
