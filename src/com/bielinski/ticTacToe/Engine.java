@@ -1,4 +1,7 @@
 package com.bielinski.ticTacToe;
 
-public class Engine {
+class Engine {
+
+    Engine() {
+    }
 }
