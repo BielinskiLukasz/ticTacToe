@@ -18,7 +18,7 @@ public class Controller {
 
     void afterMove() {
         if (model.isWinner()) view.showWinner(model.isPlayerX());
-//        else if (model.isDraw()) view.showDraw();
+        else if (model.isDraw()) view.showDraw();
 //        if(gameEnds) view.proposeNewGame();
     }
 }

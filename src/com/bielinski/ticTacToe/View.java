@@ -55,12 +55,21 @@ public class View extends JFrame implements ActionListener {
     }
 
     void showWinner(boolean isPlayerX) {
-        for (JButton button : buttons) {
-            button.setEnabled(false);
-        }
+        disableAllButtons();
         String winner;
         if (isPlayerX) winner = "X";
         else winner = "O";
         JOptionPane.showMessageDialog(null, "Game over! The winner is " + winner);
+    }
+
+    private void disableAllButtons() {
+        for (JButton button : buttons) {
+            button.setEnabled(false);
+        }
+    }
+
+    void showDraw() {
+        disableAllButtons();
+        JOptionPane.showMessageDialog(null, "Game tied!");
     }
 }

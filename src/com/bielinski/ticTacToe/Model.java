@@ -56,4 +56,21 @@ class Model {
                 fields[field1] == fields[field3] &&
                 !(fields[field1] == 0);
     }
+
+    boolean isDraw() {
+        return winningsCombinationClosed(0, 1, 2) &&
+                winningsCombinationClosed(3, 4, 5) &&
+                winningsCombinationClosed(6, 7, 8) &&
+                winningsCombinationClosed(0, 3, 6) &&
+                winningsCombinationClosed(1, 4, 7) &&
+                winningsCombinationClosed(2, 5, 8) &&
+                winningsCombinationClosed(0, 4, 8) &&
+                winningsCombinationClosed(2, 4, 6);
+    }
+
+    private boolean winningsCombinationClosed(int field1, int field2, int field3) {
+        return (!(fields[field1] == 0) || !(fields[field2] == 0) || !(fields[field3] == 0)) &&
+                ((fields[field1] == 1) || (fields[field2] == 1) || (fields[field3] == 1)) &&
+                ((fields[field1] == -1) || (fields[field2] == -1) || (fields[field3] == -1));
+    }
 }
