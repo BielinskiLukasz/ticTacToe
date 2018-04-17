@@ -1,4 +1,4 @@
 package com.bielinski.ticTacToe;
 
-public class Model {
+class Model {
 }
