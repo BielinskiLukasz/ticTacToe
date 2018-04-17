@@ -9,4 +9,15 @@ public class Controller {
         this.model = new Model();
         this.view = new View(this);
     }
+
+    Player move(int buttonNumber) {
+        model.takeField(buttonNumber);
+        if (model.isPlayerX()) return Player.PLAYER_X;
+        else return Player.PLAYER_O;
+    }
+
+    void afterMove() {
+//        if (model.isWinner()) view.showWinner();
+//        else if (model.isDraw()) view.showDraw();
+    }
 }
