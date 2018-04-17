@@ -2,12 +2,16 @@ package com.bielinski.ticTacToe;
 
 public class Controller {
 
-    private Model model;
+    Model model;
     private View view;
+
+    private boolean gameEnds;
 
     public Controller() {
         this.model = new Model();
         this.view = new View(this);
+
+        view.showStartingPlayer(model.isPlayerX());
     }
 
     Player move(int buttonNumber) {
@@ -17,7 +21,7 @@ public class Controller {
     }
 
     void afterMove() {
-        boolean gameEnds = false;
+        gameEnds = false;
         if (model.isWinner()) {
             gameEnds = true;
             view.showWinningCombination(model.takeWinningCombination());
@@ -26,10 +30,18 @@ public class Controller {
             gameEnds = true;
             view.showDraw();
         }
-        if (gameEnds) view.proposeNewGame();
+        model.afterMoveDataChange();
+        if (gameEnds) {
+            gameEnds = false;
+            view.proposeNewGame();
+        }
     }
 
     void restartGame() {
         model.resetData();
+    }
+
+    void startGameWithAI() {
+        model.initializeAIData();
     }
 }

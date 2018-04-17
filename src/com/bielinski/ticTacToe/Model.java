@@ -13,8 +13,6 @@ class Model {
     }
 
     Model() {
-        this.ai = new AI();
-
         fields = new int[9];
         randomChooseFirstPlayer();
         moveCounter = 0;
@@ -26,10 +24,13 @@ class Model {
 
     void takeField(int fieldNumber) {
         if (isAvailable(fieldNumber)) {
-            moveCounter++;
-            switchPlayer(playerX);
             fields[fieldNumber] = playerX ? 1 : -1;
         }
+    }
+
+    void afterMoveDataChange() {
+        moveCounter++;
+        switchPlayer(playerX);
     }
 
     private void switchPlayer(boolean currentPlayerIsPlayerX) {
@@ -98,5 +99,10 @@ class Model {
         for (int i = 0; i < fields.length; i++) {
             fields[i] = 0;
         }
+    }
+
+    void initializeAIData() {
+        ai = new AI();
+        if (playerX) ai.moveAI();
     }
 }

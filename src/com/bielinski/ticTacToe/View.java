@@ -5,9 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class View extends JFrame implements ActionListener {
 
@@ -36,15 +34,35 @@ public class View extends JFrame implements ActionListener {
         }
 
         setLayout(new GridLayout(3, 3));
+
+        chooseGameModeMessage();
+    }
+
+    private void chooseGameModeMessage() {
+        final String MODE_PvP = "PvP";
+        final String MODE_PvAI = "PvAI";
+        Object[] possibleValues = {MODE_PvP, MODE_PvAI};
+        Object selectedValue = JOptionPane.showInputDialog(null,
+                "Choose one", "Game Mode", JOptionPane.INFORMATION_MESSAGE,
+                null, possibleValues, possibleValues[1]);
+        if (selectedValue == null) {
+            System.exit(0);
+        } else if (selectedValue.equals(MODE_PvP)) {
+            showStartingPlayer(controller.model.isPlayerX());
+        } else if (selectedValue.equals(MODE_PvAI)) {
+            controller.startGameWithAI();
+//            playerOIsAI = true;
+//            if (!isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
+        } else System.exit(0);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
+        button.setEnabled(false);
         actualPlayer = controller.move(buttons.indexOf(button));
         button.setText(actualPlayer == Player.PLAYER_X ? "X" : "O");
         controller.afterMove();
-        button.setEnabled(false);
 
 
 //        if (playerOIsAI && !isPlayerXMoveNow && !gameEnds) moveAI(PLAYER_O, PLAYER_X);
@@ -106,5 +124,10 @@ public class View extends JFrame implements ActionListener {
         } else {
             System.exit(0);
         }
+    }
+
+    void showStartingPlayer(boolean isPlayerXMoveNow) {
+        if (isPlayerXMoveNow) JOptionPane.showMessageDialog(null, "Player X start!");
+        else JOptionPane.showMessageDialog(null, "Player O start!");
     }
 }
