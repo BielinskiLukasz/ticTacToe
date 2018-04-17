@@ -40,5 +40,20 @@ class Model {
         return fields[fieldNumber] == 0;
     }
 
+    boolean isWinner() {
+        return winningsCombination(0, 1, 2) ||
+                winningsCombination(3, 4, 5) ||
+                winningsCombination(6, 7, 8) ||
+                winningsCombination(0, 3, 6) ||
+                winningsCombination(1, 4, 7) ||
+                winningsCombination(2, 5, 8) ||
+                winningsCombination(0, 4, 8) ||
+                winningsCombination(2, 4, 6);
+    }
 
+    private boolean winningsCombination(int field1, int field2, int field3) {
+        return fields[field1] == fields[field2] &&
+                fields[field1] == fields[field3] &&
+                !(fields[field1] == 0);
+    }
 }
