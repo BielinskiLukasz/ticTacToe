@@ -16,12 +16,12 @@ class Model {
         this.ai = new AI();
 
         fields = new int[9];
-        playerX = randomChooseFirstPlayer();
+        randomChooseFirstPlayer();
         moveCounter = 0;
     }
 
-    private boolean randomChooseFirstPlayer() {
-        return (Math.random() < 0.5);
+    private void randomChooseFirstPlayer() {
+        playerX = (Math.random() < 0.5);
     }
 
     void takeField(int fieldNumber) {
@@ -41,36 +41,62 @@ class Model {
     }
 
     boolean isWinner() {
-        return winningsCombination(0, 1, 2) ||
-                winningsCombination(3, 4, 5) ||
-                winningsCombination(6, 7, 8) ||
-                winningsCombination(0, 3, 6) ||
-                winningsCombination(1, 4, 7) ||
-                winningsCombination(2, 5, 8) ||
-                winningsCombination(0, 4, 8) ||
-                winningsCombination(2, 4, 6);
+        return winningCombination(0, 1, 2) ||
+                winningCombination(3, 4, 5) ||
+                winningCombination(6, 7, 8) ||
+                winningCombination(0, 3, 6) ||
+                winningCombination(1, 4, 7) ||
+                winningCombination(2, 5, 8) ||
+                winningCombination(0, 4, 8) ||
+                winningCombination(2, 4, 6);
     }
 
-    private boolean winningsCombination(int field1, int field2, int field3) {
+    private boolean winningCombination(int field1, int field2, int field3) {
         return fields[field1] == fields[field2] &&
                 fields[field1] == fields[field3] &&
                 !(fields[field1] == 0);
     }
 
     boolean isDraw() {
-        return winningsCombinationClosed(0, 1, 2) &&
-                winningsCombinationClosed(3, 4, 5) &&
-                winningsCombinationClosed(6, 7, 8) &&
-                winningsCombinationClosed(0, 3, 6) &&
-                winningsCombinationClosed(1, 4, 7) &&
-                winningsCombinationClosed(2, 5, 8) &&
-                winningsCombinationClosed(0, 4, 8) &&
-                winningsCombinationClosed(2, 4, 6);
+        return winningCombinationClosed(0, 1, 2) &&
+                winningCombinationClosed(3, 4, 5) &&
+                winningCombinationClosed(6, 7, 8) &&
+                winningCombinationClosed(0, 3, 6) &&
+                winningCombinationClosed(1, 4, 7) &&
+                winningCombinationClosed(2, 5, 8) &&
+                winningCombinationClosed(0, 4, 8) &&
+                winningCombinationClosed(2, 4, 6);
     }
 
-    private boolean winningsCombinationClosed(int field1, int field2, int field3) {
+    private boolean winningCombinationClosed(int field1, int field2, int field3) {
         return (!(fields[field1] == 0) || !(fields[field2] == 0) || !(fields[field3] == 0)) &&
                 ((fields[field1] == 1) || (fields[field2] == 1) || (fields[field3] == 1)) &&
                 ((fields[field1] == -1) || (fields[field2] == -1) || (fields[field3] == -1));
+    }
+
+    int[] takeWinningCombination() {
+        int[][] winningCombinations = {
+                {0, 1, 2},
+                {3, 4, 5},
+                {6, 7, 8},
+                {0, 3, 6},
+                {1, 4, 7},
+                {2, 5, 8},
+                {0, 4, 8},
+                {2, 4, 6}
+        };
+        for (int[] winningCombination : winningCombinations) {
+            if (winningCombination(winningCombination[0], winningCombination[1], winningCombination[2]))
+                return winningCombination;
+        }
+        return null;
+    }
+
+    void resetData() {
+        randomChooseFirstPlayer();
+        moveCounter = 0;
+        for (int i = 0; i < fields.length; i++) {
+            fields[i] = 0;
+        }
     }
 }

@@ -72,4 +72,39 @@ public class View extends JFrame implements ActionListener {
         disableAllButtons();
         JOptionPane.showMessageDialog(null, "Game tied!");
     }
+
+    void showWinningCombination(int[] winnginButtons) {
+        for (int indexOfButton : winnginButtons) {
+            buttons.get(indexOfButton).setBackground(Color.green);
+        }
+    }
+
+    void proposeNewGame() {
+        int decision = JOptionPane.showConfirmDialog(null,
+                "Play again?", "GAME ENDS", JOptionPane.YES_NO_OPTION);
+        if (decision == 0) {
+            for (JButton button : buttons) {
+                button.setEnabled(true);
+                button.setText("");
+                button.setBackground(null);
+            }
+            controller.restartGame();
+
+
+//            if (!playerOIsAI) {
+//                if (isPlayerXMoveNow) JOptionPane.showMessageDialog(null, "Player X start!");
+//                else JOptionPane.showMessageDialog(null, "Player O start!");
+//            }
+//            for (int i = 0; i < winningButtonCombination.length; i++) {
+//                winningButtonCombination[i] = 0;
+//            }
+//            for (int i = 0; i < buttonsOwner.length; i++) {
+//                buttonsOwner[i] = 0;
+//            }
+//            counter = 0;
+//            if (!isPlayerXMoveNow && playerOIsAI) moveAI(PLAYER_O, PLAYER_X);
+        } else {
+            System.exit(0);
+        }
+    }
 }

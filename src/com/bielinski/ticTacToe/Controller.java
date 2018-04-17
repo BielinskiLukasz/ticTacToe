@@ -17,8 +17,19 @@ public class Controller {
     }
 
     void afterMove() {
-        if (model.isWinner()) view.showWinner(model.isPlayerX());
-        else if (model.isDraw()) view.showDraw();
-//        if(gameEnds) view.proposeNewGame();
+        boolean gameEnds = false;
+        if (model.isWinner()) {
+            gameEnds = true;
+            view.showWinningCombination(model.takeWinningCombination());
+            view.showWinner(model.isPlayerX());
+        } else if (model.isDraw()) {
+            gameEnds = true;
+            view.showDraw();
+        }
+        if (gameEnds) view.proposeNewGame();
+    }
+
+    void restartGame() {
+        model.resetData();
     }
 }
