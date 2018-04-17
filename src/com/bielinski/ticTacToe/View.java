@@ -1,4 +1,4 @@
-package com.bielinski;
+package com.bielinski.ticTacToe;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,9 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-public class TicTacToeFrame extends JFrame implements ActionListener {
+public class View extends JFrame implements ActionListener {
+
+    private Controller controller;
 
     private int counter = 0;
     private List<JButton> buttons = new ArrayList<>(); // button list initiation
@@ -21,20 +22,28 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
     private boolean playerOIsAI = false;
     private boolean gameEnds = false;
 
-    TicTacToeFrame(String title, int width) {
-        super(title);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(width, width); // window size set
-        setVisible(true); // window visible set
+    public View(Controller controller) {
+        this.controller = controller;
+
+        setTitle("Tic Tac Toe");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        int size = 500;
+        setSize(size, size);
+        setVisible(true);
+
         for (int i = 0; i < 9; i++) {
             JButton jButton = new JButton("");
             jButton.addActionListener(this); // "click" listener
             jButton.setFont(new Font("Arial", Font.PLAIN, this.getSize().height / 6)); // set font size
             add(jButton); // add new button
+
             buttons.add(jButton); // add button to button list
             availableButtons[i] = true;
         }
+
         setLayout(new GridLayout(3, 3)); // set buttons layout (the upper row from left to right first appears, followed by the lower rows)
+
         isPlayerXMoveNow = randomChooseFirstPlayer();
         chooseGameMode();
     }
@@ -54,14 +63,26 @@ public class TicTacToeFrame extends JFrame implements ActionListener {
             if (!isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
         } else if (selectedValue.equals(MODE_AIvAI)) {
             playerOIsAI = true;
-            while (true) { //TODO this true should be changed by proposeNweGame()
+            while (true) { //TODO this true should be changed by proposeNweGame() --> new game for AIvsAI don't work
                 while (!gameEnds) {
                     if (isPlayerXMoveNow) {
                         moveAI(PLAYER_X, PLAYER_O);
                         this.revalidate(); //TODO don't works
+                        this.repaint(); //TODO don't works
+                        try {
+                            Thread.sleep(500); //TODO don't works
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         moveAI(PLAYER_O, PLAYER_X);
                         this.repaint(1); //TODO don't works
+                        this.repaint(); //TODO don't works
+                        try {
+                            Thread.sleep(500); //TODO don't works
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 proposeNewGame(); //TODO don't works too (problems in new games, make some options with exit from while
