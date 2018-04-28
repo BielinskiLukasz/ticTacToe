@@ -8,10 +8,8 @@ public class Controller {
     private boolean gameEnds;
 
     public Controller() {
-        this.model = new Model();
+        this.model = new Model(this);
         this.view = new View(this);
-
-        view.showStartingPlayer(model.isPlayerX());
     }
 
     Player move(int buttonNumber) {
@@ -22,19 +20,22 @@ public class Controller {
 
     void afterMove() {
         gameEnds = false;
-        if (model.isWinner()) {
-            gameEnds = true;
-            view.showWinningCombination(model.takeWinningCombination());
-            view.showWinner(model.isPlayerX());
-        } else if (model.isDraw()) {
-            gameEnds = true;
-            view.showDraw();
+        if (model.getMoveCounter() >= 4) {
+            if (model.isWinner()) {
+                gameEnds = true;
+                view.showWinningCombination(model.takeWinningCombination());
+                view.showWinner(model.isPlayerX());
+            } else if (model.isDraw()) {
+                gameEnds = true;
+                view.showDraw();
+            }
+            if (gameEnds) {
+                gameEnds = false;
+                view.proposeNewGame();
+            }
         }
         model.afterMoveDataChange();
-        if (gameEnds) {
-            gameEnds = false;
-            view.proposeNewGame();
-        }
+        if (model.ai != null && !model.isPlayerX()) model.ai.moveAI();
     }
 
     void restartGame() {
@@ -43,5 +44,12 @@ public class Controller {
 
     void startGameWithAI() {
         model.initializeAIData();
+        if (!model.isPlayerX()) model.ai.moveAI(); //zapewne muszę zastąpić option pane osobnym widokiem, żeby to działało tak jak chciałem, ALE MOŻE ZNAJDĘ JAKIEś DZIAłAJĄCE ROZWIĄZANIE
+    }
+
+    void moveAI(int fieldNumber) {
+        move(fieldNumber);
+        view.viewAIMove(fieldNumber);
+        afterMove();
     }
 }

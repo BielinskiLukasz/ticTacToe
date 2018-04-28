@@ -13,6 +13,7 @@ public class View extends JFrame implements ActionListener {
 
     private List<JButton> buttons;
     private Player actualPlayer;
+    private boolean againstAI;
 
     View(Controller controller) {
         this.controller = controller;
@@ -50,9 +51,9 @@ public class View extends JFrame implements ActionListener {
         } else if (selectedValue.equals(MODE_PvP)) {
             showStartingPlayer(controller.model.isPlayerX());
         } else if (selectedValue.equals(MODE_PvAI)) {
-            controller.startGameWithAI();
-//            playerOIsAI = true;
-//            if (!isPlayerXMoveNow) moveAI(PLAYER_O, PLAYER_X);
+            againstAI = true;
+            showStartingPlayer(controller.model.isPlayerX());
+//            controller.startGameWithAI();
         } else System.exit(0);
     }
 
@@ -63,13 +64,6 @@ public class View extends JFrame implements ActionListener {
         actualPlayer = controller.move(buttons.indexOf(button));
         button.setText(actualPlayer == Player.PLAYER_X ? "X" : "O");
         controller.afterMove();
-
-
-//        if (playerOIsAI && !isPlayerXMoveNow && !gameEnds) moveAI(PLAYER_O, PLAYER_X);
-//        if (gameEnds) {
-//            gameEnds = false;
-//            proposeNewGame();
-//        }
     }
 
     void showWinner(boolean isPlayerX) {
@@ -91,8 +85,8 @@ public class View extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(null, "Game tied!");
     }
 
-    void showWinningCombination(int[] winnginButtons) {
-        for (int indexOfButton : winnginButtons) {
+    void showWinningCombination(int[] winningButtons) {
+        for (int indexOfButton : winningButtons) {
             buttons.get(indexOfButton).setBackground(Color.green);
         }
     }
@@ -126,8 +120,14 @@ public class View extends JFrame implements ActionListener {
         }
     }
 
-    void showStartingPlayer(boolean isPlayerXMoveNow) {
+    private void showStartingPlayer(boolean isPlayerXMoveNow) {
         if (isPlayerXMoveNow) JOptionPane.showMessageDialog(null, "Player X start!");
         else JOptionPane.showMessageDialog(null, "Player O start!");
+    }
+
+    void viewAIMove(int fieldNumber) {
+        JButton button = buttons.get(fieldNumber);
+        button.setEnabled(false);
+        button.setText("O");
     }
 }

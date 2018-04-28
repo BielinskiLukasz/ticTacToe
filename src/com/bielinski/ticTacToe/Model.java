@@ -2,20 +2,26 @@ package com.bielinski.ticTacToe;
 
 class Model {
 
-    private AI ai;
+    private Controller controller;
+    AI ai;
 
     private int[] fields;
     private boolean playerX;
     private int moveCounter;
 
+    Model(Controller controller) {
+        this.controller = controller;
+        fields = new int[9];
+        randomChooseFirstPlayer();
+        moveCounter = 0;
+    }
+
     boolean isPlayerX() {
         return playerX;
     }
 
-    Model() {
-        fields = new int[9];
-        randomChooseFirstPlayer();
-        moveCounter = 0;
+    int getMoveCounter() {
+        return moveCounter;
     }
 
     private void randomChooseFirstPlayer() {
@@ -25,6 +31,7 @@ class Model {
     void takeField(int fieldNumber) {
         if (isAvailable(fieldNumber)) {
             fields[fieldNumber] = playerX ? 1 : -1;
+            if (!(ai == null)) ai.refreshWinningPossibility(fieldNumber, playerX);
         }
     }
 
@@ -37,7 +44,7 @@ class Model {
         playerX = !currentPlayerIsPlayerX;
     }
 
-    private boolean isAvailable(int fieldNumber) {
+    boolean isAvailable(int fieldNumber) {
         return fields[fieldNumber] == 0;
     }
 
@@ -99,10 +106,10 @@ class Model {
         for (int i = 0; i < fields.length; i++) {
             fields[i] = 0;
         }
+        if (ai != null) initializeAIData();
     }
 
     void initializeAIData() {
-        ai = new AI();
-        if (playerX) ai.moveAI();
+        ai = new AI(this, controller);
     }
 }
