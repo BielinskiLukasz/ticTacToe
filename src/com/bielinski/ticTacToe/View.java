@@ -7,12 +7,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class View extends JFrame implements ActionListener {
+class View extends JFrame implements ActionListener {
 
-    private Controller controller;
+    private final Controller controller;
 
-    private List<JButton> buttons;
-    private Player actualPlayer;
+    private final List<JButton> buttons;
     private boolean againstAI;
 
     View(Controller controller) {
@@ -53,15 +52,25 @@ public class View extends JFrame implements ActionListener {
         } else if (selectedValue.equals(MODE_PvAI)) {
             againstAI = true;
             showStartingPlayer(controller.model.isPlayerX());
-//            controller.startGameWithAI();
         } else System.exit(0);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
+        if (againstAI && controller.model.getMoveCounter() == 0 && !controller.model.isPlayerX())
+            controller.startGameWithAI();
+        else if (againstAI && controller.model.getMoveCounter() == 0 && controller.model.isPlayerX()) {
+            controller.startGameWithAI();
+            buttonAction(button);
+        } else if ((controller.model.getMoveCounter() == 0) && againstAI && controller.model.isPlayerX() || !againstAI || controller.model.getMoveCounter() > 0) {
+            buttonAction(button);
+        }
+    }
+
+    private void buttonAction(JButton button) {
         button.setEnabled(false);
-        actualPlayer = controller.move(buttons.indexOf(button));
+        Player actualPlayer = controller.move(buttons.indexOf(button));
         button.setText(actualPlayer == Player.PLAYER_X ? "X" : "O");
         controller.afterMove();
     }
@@ -101,20 +110,6 @@ public class View extends JFrame implements ActionListener {
                 button.setBackground(null);
             }
             controller.restartGame();
-
-
-//            if (!playerOIsAI) {
-//                if (isPlayerXMoveNow) JOptionPane.showMessageDialog(null, "Player X start!");
-//                else JOptionPane.showMessageDialog(null, "Player O start!");
-//            }
-//            for (int i = 0; i < winningButtonCombination.length; i++) {
-//                winningButtonCombination[i] = 0;
-//            }
-//            for (int i = 0; i < buttonsOwner.length; i++) {
-//                buttonsOwner[i] = 0;
-//            }
-//            counter = 0;
-//            if (!isPlayerXMoveNow && playerOIsAI) moveAI(PLAYER_O, PLAYER_X);
         } else {
             System.exit(0);
         }

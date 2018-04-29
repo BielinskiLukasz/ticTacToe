@@ -2,10 +2,8 @@ package com.bielinski.ticTacToe;
 
 public class Controller {
 
-    Model model;
-    private View view;
-
-    private boolean gameEnds;
+    final Model model;
+    private final View view;
 
     public Controller() {
         this.model = new Model(this);
@@ -19,22 +17,19 @@ public class Controller {
     }
 
     void afterMove() {
-        gameEnds = false;
-        if (model.getMoveCounter() >= 4) {
-            if (model.isWinner()) {
-                gameEnds = true;
-                view.showWinningCombination(model.takeWinningCombination());
-                view.showWinner(model.isPlayerX());
-            } else if (model.isDraw()) {
-                gameEnds = true;
-                view.showDraw();
-            }
-            if (gameEnds) {
-                gameEnds = false;
-                view.proposeNewGame();
-            }
+        boolean gameEnds = false;
+        if (model.isWinner()) {
+            gameEnds = true;
+            view.showWinningCombination(model.takeWinningCombination());
+            view.showWinner(model.isPlayerX());
+        } else if (model.isDraw()) {
+            gameEnds = true;
+            view.showDraw();
         }
-        model.afterMoveDataChange();
+        if (gameEnds)
+            view.proposeNewGame();
+        else
+            model.afterMoveDataChange();
         if (model.ai != null && !model.isPlayerX()) model.ai.moveAI();
     }
 
@@ -44,7 +39,8 @@ public class Controller {
 
     void startGameWithAI() {
         model.initializeAIData();
-        if (!model.isPlayerX()) model.ai.moveAI(); //zapewne muszę zastąpić option pane osobnym widokiem, żeby to działało tak jak chciałem, ALE MOŻE ZNAJDĘ JAKIEś DZIAłAJĄCE ROZWIĄZANIE
+        if (!model.isPlayerX())
+            model.ai.moveAI();
     }
 
     void moveAI(int fieldNumber) {
