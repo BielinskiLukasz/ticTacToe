@@ -2,15 +2,17 @@ package com.bielinski.ticTacToe;
 
 class Model {
 
-    private final Controller controller;
+    private final BoardController controller;
     AI ai;
 
     private final int[] fields;
     private boolean playerX;
     private int moveCounter;
+    private final boolean againstAI;
 
-    Model(Controller controller) {
+    Model(BoardController controller, boolean againstAI) {
         this.controller = controller;
+        this.againstAI = againstAI;
         fields = new int[9];
         randomChooseFirstPlayer();
         moveCounter = 0;
@@ -26,6 +28,10 @@ class Model {
 
     int[] getFields() {
         return fields;
+    }
+
+    boolean isAgainstAI() {
+        return againstAI;
     }
 
     private void randomChooseFirstPlayer() {

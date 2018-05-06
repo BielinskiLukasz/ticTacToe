@@ -2,12 +2,12 @@ package com.bielinski.ticTacToe;
 
 class AI {
 
-    private final Controller controller;
+    private final BoardController controller;
     private final Model model;
 
     private final int[] winningCombinationsForAI;
 
-    AI(Model model, Controller controller) {
+    AI(Model model, BoardController controller) {
         this.model = model;
         this.controller = controller;
         winningCombinationsForAI = new int[8];

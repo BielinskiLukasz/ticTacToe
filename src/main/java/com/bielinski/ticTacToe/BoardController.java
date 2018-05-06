@@ -1,13 +1,14 @@
 package com.bielinski.ticTacToe;
 
-public class Controller {
+class BoardController {
 
     final Model model;
-    private final View view;
+    private final BoardView view;
 
-    public Controller() {
-        this.model = new Model(this);
-        this.view = new View(this);
+    BoardController(boolean againstAI) {
+        this.model = new Model(this, againstAI);
+        this.view = new BoardView(this);
+        if (model.isAgainstAI()) startGameWithAI();
     }
 
     Player move(int buttonNumber) {
@@ -37,7 +38,7 @@ public class Controller {
         model.resetData();
     }
 
-    void startGameWithAI() {
+    private void startGameWithAI() {
         model.initializeAIData();
         if (!model.isPlayerX())
             model.ai.moveAI();

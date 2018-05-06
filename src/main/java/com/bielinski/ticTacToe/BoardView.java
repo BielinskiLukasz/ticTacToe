@@ -7,68 +7,44 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-class View extends JFrame implements ActionListener {
+class BoardView extends JFrame implements ActionListener {
 
-    private final Controller controller;
+    private final BoardController controller;
 
     private final List<JButton> buttons;
-    private boolean againstAI;
 
-    View(Controller controller) {
+    BoardView(BoardController controller) {
+        JPanel jPanel = new JPanel();
         this.controller = controller;
 
         setTitle("Tic Tac Toe");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        add(jPanel);
         int size = 500;
-        setSize(size, size);
+        jPanel.setPreferredSize(new Dimension(size, size));
         setVisible(true);
+        jPanel.setBackground(Color.black);
+        pack();
 
         buttons = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             JButton jButton = new JButton("");
             jButton.addActionListener(this);
-            jButton.setFont(new Font("Arial", Font.PLAIN, this.getSize().height / 6)); // set font size
-            add(jButton);
+            jButton.setFont(new Font("Arial", Font.PLAIN, this.getSize().height / 6));
+            jPanel.add(jButton);
             buttons.add(jButton);
         }
 
-        setLayout(new GridLayout(3, 3));
+        jPanel.setLayout(new GridLayout(3, 3));
 
-        chooseGameModeMessage();
-    }
-
-    private void chooseGameModeMessage() {
-        final String MODE_PvP = "PvP";
-        final String MODE_PvAI = "PvAI";
-        Object[] possibleValues = {MODE_PvP, MODE_PvAI};
-        Object selectedValue = JOptionPane.showInputDialog(null,
-                "Choose one", "Game Mode", JOptionPane.INFORMATION_MESSAGE,
-                null, possibleValues, possibleValues[1]);
-        if (selectedValue == null) {
-            System.exit(0);
-        } else if (selectedValue.equals(MODE_PvP)) {
-            showStartingPlayer(controller.model.isPlayerX());
-        } else if (selectedValue.equals(MODE_PvAI)) {
-            againstAI = true;
-            showStartingPlayer(controller.model.isPlayerX());
-        } else System.exit(0);
+        showStartingPlayer(controller.model.isPlayerX());
+        pack();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
-        if (againstAI && controller.model.getMoveCounter() == 0 && !controller.model.isPlayerX())
-            controller.startGameWithAI();
-        else if (againstAI && controller.model.getMoveCounter() == 0 && controller.model.isPlayerX()) {
-            controller.startGameWithAI();
-            buttonAction(button);
-        } else if ((controller.model.getMoveCounter() == 0) && againstAI && controller.model.isPlayerX() || !againstAI || controller.model.getMoveCounter() > 0) {
-            buttonAction(button);
-        }
-    }
-
-    private void buttonAction(JButton button) {
         button.setEnabled(false);
         Player actualPlayer = controller.move(buttons.indexOf(button));
         button.setText(actualPlayer == Player.PLAYER_X ? "X" : "O");
@@ -96,7 +72,7 @@ class View extends JFrame implements ActionListener {
 
     void showWinningCombination(int[] winningButtons) {
         for (int indexOfButton : winningButtons) {
-            buttons.get(indexOfButton).setBackground(Color.green);
+            buttons.get(indexOfButton).setForeground(Color.green);
         }
     }
 
@@ -107,7 +83,7 @@ class View extends JFrame implements ActionListener {
             for (JButton button : buttons) {
                 button.setEnabled(true);
                 button.setText("");
-                button.setBackground(null);
+                button.setForeground(UIManager.getColor("Button.foreground"));
             }
             controller.restartGame();
         } else {
