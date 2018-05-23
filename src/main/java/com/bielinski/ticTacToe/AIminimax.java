@@ -37,10 +37,25 @@ class AIminimax {
             if (field == 0) counter++;
         }
         for (int i = 0; i < aiFields.length; i++) {
+            if (model.isAvailable(i)) {
+                minimaxBoard[i] = -1;
+                if (model.isWinner(minimaxBoard)) return i;
+                minimaxBoard[i] = 0;
+            }
+        }
+        for (int i = 0; i < aiFields.length; i++) {
+            if (model.isAvailable(i)) {
+                minimaxBoard[i] = 1;
+                if (model.isWinner(minimaxBoard)) return i;
+                minimaxBoard[i] = 0;
+            }
+        }
+        for (int i = 0; i < aiFields.length; i++) {
             //start
             System.out.println("take field " + i);
             //end
             if (model.isAvailable(i)) aiFields[i] = checkField(minimaxBoard, i, counter, true);
+
         }
         for (int i = 0; i < aiFields.length; i++) {
             for (int j = 0; j < minimaxBoard.length; j++) {
@@ -75,19 +90,21 @@ class AIminimax {
 
     private int checkField(int[] minimaxBoard, int fieldChecked, int counter, boolean ai) {
         //start
-        System.out.println("\tcheck field " + fieldChecked);
+//        System.out.println("\tcheck field " + fieldChecked);
         checkCounter[fieldChecked]++;
         //end
         int returned = 0;
         if (minimaxBoard[fieldChecked] == 0) {
             minimaxBoard[fieldChecked] = ai ? -1 : 1;
-            if (model.isWinner(minimaxBoard)) return (ai ? -10 : 10) * counter;
-            else {
+            if (model.isWinner(minimaxBoard)) {
+                //start
+                System.out.println("\tcheck field" + fieldChecked + "\t " + (ai ? -1 : 1) * counter);
+                //end
+                return (ai ? -1 : 1) * counter;
+            } else {
                 for (int i = 0; i < minimaxBoard.length; i++) {
-                    if (minimaxBoard[i] == 0) {
-                        if (counter-- > 1) {
-                            returned += checkField(minimaxBoard, i, counter, !ai);
-                        }
+                    if (minimaxBoard[i] == 0 && counter-- > 1) {
+                        returned += checkField(minimaxBoard, i, counter, !ai);
                         minimaxBoard[i] = 0;
                     }
                 }
