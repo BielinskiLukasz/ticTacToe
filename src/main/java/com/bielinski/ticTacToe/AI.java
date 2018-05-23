@@ -1,6 +1,6 @@
 package com.bielinski.ticTacToe;
 
-class AI {
+class AI { //must upgrade AI (lost game when X start 6 and follow 5)
 
     private final BoardController controller;
     private final Model model;

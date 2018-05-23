@@ -58,21 +58,21 @@ class Model {
         return fields[fieldNumber] == 0;
     }
 
-    boolean isWinner() {
-        return winningCombination(0, 1, 2) ||
-                winningCombination(3, 4, 5) ||
-                winningCombination(6, 7, 8) ||
-                winningCombination(0, 3, 6) ||
-                winningCombination(1, 4, 7) ||
-                winningCombination(2, 5, 8) ||
-                winningCombination(0, 4, 8) ||
-                winningCombination(2, 4, 6);
+    boolean isWinner(int[] checkBoard) {
+        return winningCombination(checkBoard, 0, 1, 2) ||
+                winningCombination(checkBoard, 3, 4, 5) ||
+                winningCombination(checkBoard, 6, 7, 8) ||
+                winningCombination(checkBoard, 0, 3, 6) ||
+                winningCombination(checkBoard, 1, 4, 7) ||
+                winningCombination(checkBoard, 2, 5, 8) ||
+                winningCombination(checkBoard, 0, 4, 8) ||
+                winningCombination(checkBoard, 2, 4, 6);
     }
 
-    private boolean winningCombination(int field1, int field2, int field3) {
-        return fields[field1] == fields[field2] &&
-                fields[field1] == fields[field3] &&
-                !(fields[field1] == 0);
+    private boolean winningCombination(int[] checkBoard, int field1, int field2, int field3) {
+        return checkBoard[field1] == checkBoard[field2] &&
+                checkBoard[field1] == checkBoard[field3] &&
+                !(checkBoard[field1] == 0);
     }
 
     boolean isDraw() {
@@ -104,7 +104,7 @@ class Model {
                 {2, 4, 6}
         };
         for (int[] winningCombination : winningCombinations) {
-            if (winningCombination(winningCombination[0], winningCombination[1], winningCombination[2]))
+            if (winningCombination(fields, winningCombination[0], winningCombination[1], winningCombination[2]))
                 return winningCombination;
         }
         return null;

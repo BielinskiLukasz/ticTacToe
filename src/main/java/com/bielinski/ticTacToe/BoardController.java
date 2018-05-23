@@ -19,7 +19,7 @@ class BoardController {
 
     void afterMove() {
         boolean gameEnds = false;
-        if (model.isWinner()) {
+        if (model.isWinner(model.getFields())) {
             gameEnds = true;
             view.showWinningCombination(model.takeWinningCombination());
             view.showWinner(model.isPlayerX());
