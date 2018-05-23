@@ -7,7 +7,6 @@ class Model {
 
     private final int[] fields;
     private boolean playerX;
-    private int moveCounter;
     private final boolean againstAI;
 
     Model(BoardController controller, boolean againstAI) {
@@ -15,15 +14,10 @@ class Model {
         this.againstAI = againstAI;
         fields = new int[9];
         randomChooseFirstPlayer();
-        moveCounter = 0;
     }
 
     boolean isPlayerX() {
         return playerX;
-    }
-
-    int getMoveCounter() {
-        return moveCounter;
     }
 
     int[] getFields() {
@@ -39,14 +33,10 @@ class Model {
     }
 
     void takeField(int fieldNumber) {
-        if (isAvailable(fieldNumber)) {
-            fields[fieldNumber] = playerX ? 1 : -1;
-            if (ai != null) ai.refreshWinningPossibility(fieldNumber, playerX);
-        }
+        if (isAvailable(fieldNumber)) fields[fieldNumber] = playerX ? 1 : -1;
     }
 
     void afterMoveDataChange() {
-        moveCounter++;
         switchPlayer(playerX);
     }
 
@@ -112,7 +102,6 @@ class Model {
 
     void resetData() {
         randomChooseFirstPlayer();
-        moveCounter = 0;
         for (int i = 0; i < fields.length; i++) {
             fields[i] = 0;
         }
