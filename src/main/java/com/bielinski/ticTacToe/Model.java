@@ -3,7 +3,7 @@ package com.bielinski.ticTacToe;
 class Model {
 
     private final BoardController controller;
-    AI ai;
+    AIminimax ai;
 
     private final int[] fields;
     private boolean playerX;
@@ -120,6 +120,6 @@ class Model {
     }
 
     void initializeAIData() {
-        ai = new AI(this, controller);
+        ai = new AIminimax(this, controller);
     }
 }

@@ -9,12 +9,19 @@ class AIminimax {
     private int[] aiFields;
     private int[] minimaxBoard;
 
+    //start
+    private int[] checkCounter;
+    //end
+
     AIminimax(Model model, BoardController controller) {
         this.model = model;
         this.controller = controller;
         winningCombinationsForAI = new int[8];
         aiFields = new int[9];
         minimaxBoard = new int[9];
+        //start
+        checkCounter = new int[9];
+        //end
     }
 
     void moveAI() {
@@ -22,34 +29,70 @@ class AIminimax {
     }
 
     private int chooseFieldForAI() {
-        minimaxBoard = model.getFields();
-        int counter = -1;
+        for (int i = 0; i < minimaxBoard.length; i++) {
+            minimaxBoard[i] = model.getFields()[i];
+        }
+        int counter = 0;
         for (int field : minimaxBoard) {
             if (field == 0) counter++;
         }
         for (int i = 0; i < aiFields.length; i++) {
-            minimaxBoard[i] = -1;
-            aiFields[i] = checkField(minimaxBoard, counter, false);
-            minimaxBoard = model.getFields();
+            //start
+            System.out.println("take field " + i);
+            //end
+            if (model.isAvailable(i)) aiFields[i] = checkField(minimaxBoard, i, counter, true);
         }
-        int min = 0;
+        for (int i = 0; i < aiFields.length; i++) {
+            for (int j = 0; j < minimaxBoard.length; j++) {
+                minimaxBoard[j] = model.getFields()[j];
+            }
+            if (!model.isAvailable(i)) aiFields[i] = Integer.MAX_VALUE;
+        }
+        //start
+        System.out.println("*******************************");
+        for (int i : checkCounter) {
+            System.out.println(i);
+        }
+        System.out.println("*******************************");
         for (int aiField : aiFields) {
-            if (aiField < min) min = aiField;
+            System.out.println(aiField);
+        }
+        System.out.println("*******************************");
+        //end
+        int min = Integer.MAX_VALUE;
+        int iMin = 4;
+        for (int i = 0; i < aiFields.length; i++) {
+            if (aiFields[i] < min) {
+                min = aiFields[i];
+                iMin = i;
+            }
         }
         for (int i = 0; i < aiFields.length; i++) {
             aiFields[i] = 0;
         }
-        return min;
+        return iMin;
     }
 
-    private int checkField(int[] minimaxBoard, int stepLeft, boolean ai) {
+    private int checkField(int[] minimaxBoard, int fieldChecked, int counter, boolean ai) {
+        //start
+        System.out.println("\tcheck field " + fieldChecked);
+        checkCounter[fieldChecked]++;
+        //end
         int returned = 0;
-        if (model.isWinner(minimaxBoard)) return (ai ? -1 : 1) * 10 * stepLeft;
-        for (int i = 0; i < minimaxBoard.length; i++) {
-            if (minimaxBoard[i] == 0) {
-                minimaxBoard[i] = ai ? -1 : 1;
-                returned += checkField(minimaxBoard, --stepLeft, !ai);
+        if (minimaxBoard[fieldChecked] == 0) {
+            minimaxBoard[fieldChecked] = ai ? -1 : 1;
+            if (model.isWinner(minimaxBoard)) return (ai ? -10 : 10) * counter;
+            else {
+                for (int i = 0; i < minimaxBoard.length; i++) {
+                    if (minimaxBoard[i] == 0) {
+                        if (counter-- > 1) {
+                            returned += checkField(minimaxBoard, i, counter, !ai);
+                        }
+                        minimaxBoard[i] = 0;
+                    }
+                }
             }
+            minimaxBoard[fieldChecked] = 0;
         }
         return returned;
     }
