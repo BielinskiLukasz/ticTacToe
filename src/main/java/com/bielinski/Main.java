@@ -6,13 +6,15 @@ import javax.swing.*;
 
 class Main {
     public static void main(String[] args) {
+        upgradeView();
+        SwingUtilities.invokeLater(StartController::new);
+    }
 
+    private static void upgradeView() {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
-        } //with that i can't see winners combination
-
-        SwingUtilities.invokeLater(StartController::new);
+        }
     }
 }
