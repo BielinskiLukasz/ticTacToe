@@ -12,6 +12,7 @@ class StartView extends JFrame {
         setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints(); //to organisation axis of added elements
 
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5); //set up insets between elements
         createLabelOnTheLayout(gridBagConstraints);
         createStartButtonOnTheLayout(gridBagConstraints);
         createExitButtonOnTheLabel(gridBagConstraints);
@@ -39,7 +40,7 @@ class StartView extends JFrame {
         gridBagConstraints.gridy = 2;
         JButton jButtonClose = new JButton("Close application");
         add(jButtonClose, gridBagConstraints);
-        gridBagConstraints.insets = new Insets(10, 5, 10, 5); //set up insets between elements
+
         jButtonClose.addActionListener(
                 e -> System.exit(0));
     }
@@ -49,7 +50,7 @@ class StartView extends JFrame {
 
         Object selectedValue = JOptionPane.showInputDialog(null,
                 "Choose one", "Game Mode", JOptionPane.INFORMATION_MESSAGE,
-                null, availableGameModes, availableGameModes[0]);
+                null, availableGameModes, availableGameModes[1]);
         hideGameModeMessage();
         performSelectedAction(selectedValue);
     }
@@ -62,9 +63,9 @@ class StartView extends JFrame {
         if (isNoModeSelected(selectedValue)) {
             System.exit(0);
         } else if (isPvPModeSelected(selectedValue)) {
-            startNewGame(false);
+            startNewPvPGame();
         } else if (isPvAIModeSelected(selectedValue)) {
-            startNewGame(true);
+            startNewPvAIGame();
         }
     }
 
@@ -76,11 +77,15 @@ class StartView extends JFrame {
         return selectedValue.equals(GameMode.PvP);
     }
 
+    private void startNewPvPGame() {
+        BoardControllerInPvPMode.startNewGame();
+    }
+
     private boolean isPvAIModeSelected(Object selectedValue) {
         return selectedValue.equals(GameMode.PvAI);
     }
 
-    private void startNewGame(boolean againstAI) {
-        new BoardController(againstAI);
+    private void startNewPvAIGame() {
+        BoardControllerInPvAIMode.startNewGame();
     }
 }
