@@ -51,11 +51,11 @@ class StartView extends JFrame {
         Object selectedValue = JOptionPane.showInputDialog(null,
                 "Choose one", "Game Mode", JOptionPane.INFORMATION_MESSAGE,
                 null, availableGameModes, availableGameModes[1]);
-        hideGameModeMessage();
+        hideStartWindow();
         performSelectedAction(selectedValue);
     }
 
-    private void hideGameModeMessage() {
+    private void hideStartWindow() {
         setVisible(false);
     }
 
