@@ -1,6 +1,10 @@
 package com.bielinski.ticTacToe;
 
 public enum Player {
-    PLAYER_X,
-    PLAYER_O
+    X,
+    O;
+
+    public Player nextPlayer() {
+        return this == X ? O : X;
+    }
 }
