@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WinnerFinderTest {
 
     @Test
-    public void shouldReturnTrueForXXXOO_O__Board() {
+    public void shouldReturnTrueWhenCheckWinnerForXXXOO_O__Board() {
         //given
         int[] checkBoard = {
                 1, 1, 1,
@@ -21,7 +21,7 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnTrueForOO_XXX_O_Board() {
+    public void shouldReturnTrueWhenCheckWinnerForOO_XXX_O_Board() {
         //given
         int[] checkBoard = {
                 -1, -1, 0,
@@ -35,7 +35,7 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnTrueForOO_O__XXXBoard() {
+    public void shouldReturnTrueWhenCheckWinnerForOO_O__XXXBoard() {
         //given
         int[] checkBoard = {
                 -1, -1, 0,
@@ -49,7 +49,7 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnTrueForXOOXO_XXOBoard() {
+    public void shouldReturnTrueWhenCheckWinnerForXOOXO_XXOBoard() {
         //given
         int[] checkBoard = {
                 1, -1, -1,
@@ -63,7 +63,7 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnTrueForOXOOXX_XOBoard() {
+    public void shouldReturnTrueWhenCheckWinnerForOXOOXX_XOBoard() {
         //given
         int[] checkBoard = {
                 -1, 1, -1,
@@ -77,7 +77,7 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnTrueForXOXOOXO_XBoard() {
+    public void shouldReturnTrueWhenCheckWinnerForXOXOOXO_XBoard() {
         //given
         int[] checkBoard = {
                 1, -1, 1,
@@ -91,7 +91,7 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnTrueForXOOOXXOOXBoard() {
+    public void shouldReturnTrueWhenCheckWinnerForXOOOXXOOXBoard() {
         //given
         int[] checkBoard = {
                 1, -1, -1,
@@ -105,7 +105,7 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnTrueFor_OXOX_X__Board() {
+    public void shouldReturnTrueWhenCheckWinnerFor_OXOX_X__Board() {
         //given
         int[] checkBoard = {
                 0, -1, 1,
@@ -119,7 +119,7 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnTrueForXX_OOOX__Board() {
+    public void shouldReturnTrueWhenCheckWinnerForXX_OOOX__Board() {
         //given
         int[] checkBoard = {
                 1, 1, 0,
@@ -133,7 +133,7 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnFalseFor_________Board() {
+    public void shouldReturnFalseWhenCheckWinnerFor_________Board() {
         //given
         int[] checkBoard = {
                 0, 0, 0,
@@ -147,7 +147,7 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnFalseForX_X_O_X_XBoard() {
+    public void shouldReturnFalseWhenCheckWinnerForX_X_O_X_XBoard() {
         //given
         int[] checkBoard = {
                 1, 0, 1,
@@ -161,7 +161,7 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnTrueForX_X_O_X_XBoard() {
+    public void shouldReturnTrueWhenCheckDrawForX_X_O_X_XBoard() {
         //given
         int[] checkBoard = {
                 1, -1, 1,
@@ -175,12 +175,26 @@ public class WinnerFinderTest {
     }
 
     @Test
-    public void shouldReturnFalseForX_X_O_X_OBoard() {
+    public void shouldReturnFalseWhenCheckDrawFor_________BoardWhen() {
         //given
         int[] checkBoard = {
-                1, 0, 1,
+                0, 0, 0,
+                0, 0, 0,
+                0, 0, 0
+        };
+        //when
+        boolean isDraw = WinnerFinder.isDraw(checkBoard);
+        //then
+        assertThat(isDraw).isFalse();
+    }
+
+    @Test
+    public void shouldReturnFalseWhenCheckDrawForX___O___OBoard() {
+        //given
+        int[] checkBoard = {
+                1, 0, 0,
                 0, -1, 0,
-                1, 0, -1
+                0, 0, -1
         };
         //when
         boolean isDraw = WinnerFinder.isDraw(checkBoard);
