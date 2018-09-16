@@ -24,7 +24,7 @@ class WinnerFinder {
                 isWinningCombinationUnavailable(checkBoard[3], checkBoard[4], checkBoard[5]) &&
                 isWinningCombinationUnavailable(checkBoard[6], checkBoard[7], checkBoard[8]) &&
                 isWinningCombinationUnavailable(checkBoard[0], checkBoard[3], checkBoard[6]) &&
-                isWinningCombinationUnavailable(checkBoard[1], checkBoard[4], checkBoard[4]) &&
+                isWinningCombinationUnavailable(checkBoard[1], checkBoard[4], checkBoard[7]) &&
                 isWinningCombinationUnavailable(checkBoard[2], checkBoard[5], checkBoard[8]) &&
                 isWinningCombinationUnavailable(checkBoard[0], checkBoard[4], checkBoard[8]) &&
                 isWinningCombinationUnavailable(checkBoard[2], checkBoard[4], checkBoard[6]);
