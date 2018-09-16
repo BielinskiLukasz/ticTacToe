@@ -3,36 +3,36 @@ package com.bielinski.ticTacToe;
 class WinnerFinder {
 
     static boolean isWinner(int[] checkBoard) {
-        return winningCombination(checkBoard, 0, 1, 2) ||
-                winningCombination(checkBoard, 3, 4, 5) ||
-                winningCombination(checkBoard, 6, 7, 8) ||
-                winningCombination(checkBoard, 0, 3, 6) ||
-                winningCombination(checkBoard, 1, 4, 7) ||
-                winningCombination(checkBoard, 2, 5, 8) ||
-                winningCombination(checkBoard, 0, 4, 8) ||
-                winningCombination(checkBoard, 2, 4, 6);
+        return isItAWinningCombination(checkBoard[0], checkBoard[1], checkBoard[2]) ||
+                isItAWinningCombination(checkBoard[3], checkBoard[4], checkBoard[5]) ||
+                isItAWinningCombination(checkBoard[6], checkBoard[7], checkBoard[8]) ||
+                isItAWinningCombination(checkBoard[0], checkBoard[3], checkBoard[6]) ||
+                isItAWinningCombination(checkBoard[1], checkBoard[4], checkBoard[7]) ||
+                isItAWinningCombination(checkBoard[2], checkBoard[5], checkBoard[8]) ||
+                isItAWinningCombination(checkBoard[0], checkBoard[4], checkBoard[8]) ||
+                isItAWinningCombination(checkBoard[2], checkBoard[4], checkBoard[6]);
     }
 
-    private static boolean winningCombination(int[] checkBoard, int field1, int field2, int field3) {
-        return checkBoard[field1] == checkBoard[field2] &&
-                checkBoard[field1] == checkBoard[field3] &&
-                !(checkBoard[field1] == 0);
+    private static boolean isItAWinningCombination(int field1, int field2, int field3) {
+        return field1 == field2 &&
+                field1 == field3 &&
+                !(field1 == 0);
     }
 
     static boolean isDraw(int[] checkBoard) {
-        return winningCombinationClosed(checkBoard, 0, 1, 2) &&
-                winningCombinationClosed(checkBoard, 3, 4, 5) &&
-                winningCombinationClosed(checkBoard, 6, 7, 8) &&
-                winningCombinationClosed(checkBoard, 0, 3, 6) &&
-                winningCombinationClosed(checkBoard, 1, 4, 7) &&
-                winningCombinationClosed(checkBoard, 2, 5, 8) &&
-                winningCombinationClosed(checkBoard, 0, 4, 8) &&
-                winningCombinationClosed(checkBoard, 2, 4, 6);
+        return isWinningCombinationUnavailable(checkBoard[0], checkBoard[1], checkBoard[2]) &&
+                isWinningCombinationUnavailable(checkBoard[3], checkBoard[4], checkBoard[5]) &&
+                isWinningCombinationUnavailable(checkBoard[6], checkBoard[7], checkBoard[8]) &&
+                isWinningCombinationUnavailable(checkBoard[0], checkBoard[3], checkBoard[6]) &&
+                isWinningCombinationUnavailable(checkBoard[1], checkBoard[4], checkBoard[4]) &&
+                isWinningCombinationUnavailable(checkBoard[2], checkBoard[5], checkBoard[8]) &&
+                isWinningCombinationUnavailable(checkBoard[0], checkBoard[4], checkBoard[8]) &&
+                isWinningCombinationUnavailable(checkBoard[2], checkBoard[4], checkBoard[6]);
     }
 
-    private static boolean winningCombinationClosed(int[] checkBoard, int field1, int field2, int field3) {
-        return (!(checkBoard[field1] == 0) || !(checkBoard[field2] == 0) || !(checkBoard[field3] == 0)) &&
-                ((checkBoard[field1] == 1) || (checkBoard[field2] == 1) || (checkBoard[field3] == 1)) &&
-                ((checkBoard[field1] == -1) || (checkBoard[field2] == -1) || (checkBoard[field3] == -1));
+    private static boolean isWinningCombinationUnavailable(int field1, int field2, int field3) {
+        return (!(field1 == 0) || !(field2 == 0) || !(field3 == 0)) &&
+                ((field1 == 1) || (field2 == 1) || (field3 == 1)) &&
+                ((field1 == -1) || (field2 == -1) || (field3 == -1));
     }
 }
