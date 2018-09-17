@@ -34,24 +34,4 @@ public class AIminimaxTest {
         assertThat(bestFieldIndex).isEqualTo(1);
     }
 
-    @Test
-    public void shouldReturnPlayerXForPlayerO() {
-        //given
-        Player actualPlayer = Player.PLAYER_O;
-        //when
-        actualPlayer = AIminimax.switchPlayer(actualPlayer);
-        //then
-        assertThat(actualPlayer).isEqualTo(Player.PLAYER_X);
-    }
-
-    @Test
-    public void shouldReturnPlayerOForPlayerO() {
-        //given
-        Player actualPlayer = Player.PLAYER_X;
-        //when
-        actualPlayer = AIminimax.switchPlayer(actualPlayer);
-        //then
-        assertThat(actualPlayer).isEqualTo(Player.PLAYER_O);
-    }
-
 }
