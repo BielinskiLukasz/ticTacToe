@@ -2,86 +2,74 @@ package com.bielinski.ticTacToe;
 
 class AIminimax {
 
-    private final BoardController controller;
-    private final Model model;
+    private final static int MINIMAX_ALGORITHM_DEPTH = 9;
 
-    private final int[] winningCombinationsForAI;
-    private int[] aiFields;
-    private int[] minimaxBoard;
+    private static int[] fieldPointValue;
 
-    AIminimax(Model model, BoardController controller) {
-        this.model = model;
-        this.controller = controller;
-        winningCombinationsForAI = new int[8];
-        aiFields = new int[9];
-        minimaxBoard = new int[9];
-    }
-
-    void moveAI() {
-        controller.moveAI(chooseFieldForAI());
-    }
-
-    private int chooseFieldForAI() {
-        for (int i = 0; i < minimaxBoard.length; i++) minimaxBoard[i] = model.getFields()[i];
-        int counter = 0;
-        for (int field : minimaxBoard) {
-            if (field == 0) counter++;
-        }
-        for (int i = 0; i < aiFields.length; i++) {
-            if (model.isAvailable(i)) {
-                minimaxBoard[i] = -1;
-                if (model.isWinner(minimaxBoard)) return i;
-                minimaxBoard[i] = 0;
+    static int chooseFieldForAI(int[] boardsFields) {
+        fieldPointValue = new int[boardsFields.length];
+        for (int i = 0; i < fieldPointValue.length; i++) {
+            if (boardsFields[i] == 0) {
+                int[] localBoardFields = new int[9];
+                System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldPointValue.length);
+                localBoardFields[i] = -1;
+                calculateMinimaxAlgorithmForActualBoard(
+                        localBoardFields,
+                        i,
+                        (int) Math.pow(2, 9),
+                        Player.O,
+                        0);
+            } else {
+                fieldPointValue[i] = Integer.MIN_VALUE;
             }
         }
-        for (int i = 0; i < aiFields.length; i++) {
-            if (model.isAvailable(i)) {
-                minimaxBoard[i] = 1;
-                if (model.isWinner(minimaxBoard)) return i;
-                minimaxBoard[i] = 0;
-            }
-        }
-        for (int i = 0; i < aiFields.length; i++)
-            if (model.isAvailable(i)) aiFields[i] = checkField(minimaxBoard, i, counter, true);
-        for (int i = 0; i < aiFields.length; i++) {
-            for (int j = 0; j < minimaxBoard.length; j++) minimaxBoard[j] = model.getFields()[j];
-            if (!model.isAvailable(i)) aiFields[i] = Integer.MAX_VALUE;
-        }
-        int min = Integer.MAX_VALUE;
-        int iMin = 4;
-        for (int i = 0; i < aiFields.length; i++) {
-            if (aiFields[i] < min) {
-                min = aiFields[i];
-                iMin = i;
-            }
-        }
-        for (int i = 0; i < aiFields.length; i++) aiFields[i] = 0;
-        return iMin;
+        return findBestFieldIndex(fieldPointValue);
     }
 
-    private int checkField(int[] minimaxBoard, int fieldChecked, int counter, boolean ai) {
-        int returned = 0;
-        if (minimaxBoard[fieldChecked] == 0) {
-            minimaxBoard[fieldChecked] = ai ? -1 : 1;
-            if (model.isWinner(minimaxBoard)) return (ai ? -1 : 1) * counter;
-            else {
-                for (int i = 0; i < minimaxBoard.length; i++) {
-                    if (minimaxBoard[i] == 0 && counter-- > 1) {
-                        returned += checkField(minimaxBoard, i, counter, !ai);
-                        minimaxBoard[i] = 0;
-                    }
-                }
+    private static void calculateMinimaxAlgorithmForActualBoard(
+            int[] boardsFields,
+            int checkedFieldIndex,
+            int pointsForWining,
+            Player actualPlayer,
+            int actualAlgorithmDepth) {
+
+        if (WinnerFinder.isWinner(boardsFields)) {
+            fieldPointValue[checkedFieldIndex] += actualPlayer == Player.X ? -pointsForWining : pointsForWining;
+        } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH && !WinnerFinder.isDraw(boardsFields)) {
+            int[] localBoardFields = new int[9];
+            System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldPointValue.length);
+            for (int i = 0; i < fieldPointValue.length; i++) {
+                localBoardFields[i] = actualPlayer == Player.X ? 1 : -1;
+                calculateMinimaxAlgorithmForActualBoard(
+                        localBoardFields,
+                        checkedFieldIndex,
+                        pointsForWining / 2,
+                        actualPlayer.nextPlayer(),
+                        ++actualAlgorithmDepth);
             }
-            minimaxBoard[fieldChecked] = 0;
         }
-        return returned;
     }
 
-    void resetAIData() {
-        for (int i = 0; i < winningCombinationsForAI.length; i++) {
-            winningCombinationsForAI[i] = 0;
-            aiFields[i] = 0;
-            minimaxBoard[i] = 0;
+    static int findBestFieldIndex(int[] fieldPointValue) {
+        int maxValue = Integer.MIN_VALUE;
+        int bestFieldIndex = fieldPointValue.length / 2;
+
+        for (int i = 0; i < fieldPointValue.length; i++) {
+            if (fieldPointValue[i] > maxValue) {
+                maxValue = fieldPointValue[i];
+                bestFieldIndex = i;
+            }
         }
+
+        return bestFieldIndex;
     }
+
+//    public static int testPhase(int[] boardsFields) { //TODO Remove after debug
+//        for (int i = 0; i < boardsFields.length; i++) {
+//            if (boardsFields[i] == 0){
+//                return i;
+//            }
+//        }
+//        return 0;
+//    }
 }
