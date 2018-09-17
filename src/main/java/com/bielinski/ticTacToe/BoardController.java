@@ -1,52 +1,42 @@
 package com.bielinski.ticTacToe;
 
-class BoardController {
+abstract class BoardController {
 
     final Model model;
-    private final BoardView view;
+    final BoardView view;
 
-    BoardController(boolean againstAI) {
-        this.model = new Model(this, againstAI);
+    BoardController() {
+        this.model = new Model(this);
         this.view = new BoardView(this);
-        if (model.isAgainstAI()) startGameWithAI();
     }
 
-    Player move(int buttonNumber) {
+    Player move(int buttonNumber) { //TODO Remove Player return (why its do it???)
         model.takeField(buttonNumber);
-        if (model.isPlayerX()) return Player.PLAYER_X;
-        else return Player.PLAYER_O;
+        if (model.currentPlayer == Player.X) return Player.X;
+        else return Player.O;
     }
+
+    abstract void afterMoveAction();
 
     void afterMove() {
         boolean gameEnds = false;
-        if (model.isWinner(model.getFields())) {
+
+        if (model.isWinner(model.getFields())) { //TODO Uncomment that piece of code after debug
             gameEnds = true;
             view.showWinningCombination(model.takeWinningCombination());
-            view.showWinner(model.isPlayerX());
+            view.showWinner(model.currentPlayer == Player.X);
         } else if (model.isDraw()) {
             gameEnds = true;
             view.showDraw();
         }
+
         if (gameEnds)
             view.proposeNewGame();
         else
             model.afterMoveDataChange();
-        if (model.ai != null && !model.isPlayerX()) model.ai.moveAI();
     }
 
     void restartGame() {
         model.resetData();
-    }
-
-    private void startGameWithAI() {
-        model.initializeAIData();
-        if (!model.isPlayerX())
-            model.ai.moveAI();
-    }
-
-    void moveAI(int fieldNumber) {
-        move(fieldNumber);
-        view.viewAIMove(fieldNumber);
-        afterMove();
     }
 }
