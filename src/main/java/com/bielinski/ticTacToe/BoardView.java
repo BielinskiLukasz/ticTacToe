@@ -38,7 +38,7 @@ class BoardView extends JFrame implements ActionListener {
 
         jPanel.setLayout(new GridLayout(3, 3));
 
-        showStartingPlayer(controller.model.isPlayerX());
+        showStartingPlayerMessage(controller.model.currentPlayer);
         pack();
     }
 
@@ -47,8 +47,8 @@ class BoardView extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         button.setEnabled(false);
         Player actualPlayer = controller.move(buttons.indexOf(button));
-        button.setText(actualPlayer == Player.PLAYER_X ? "X" : "O");
-        controller.afterMove();
+        button.setText(actualPlayer == Player.X ? "X" : "O");
+        controller.afterMoveAction();
     }
 
     void showWinner(boolean isPlayerX) {
@@ -91,9 +91,12 @@ class BoardView extends JFrame implements ActionListener {
         }
     }
 
-    private void showStartingPlayer(boolean isPlayerXMoveNow) {
-        if (isPlayerXMoveNow) JOptionPane.showMessageDialog(null, "Player X start!");
-        else JOptionPane.showMessageDialog(null, "Player O start!");
+    private void showStartingPlayerMessage(Player currentPlayer) {
+        if (currentPlayer == Player.X) {
+            JOptionPane.showMessageDialog(null, "Player X start!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Player O start!");
+        }
     }
 
     void viewAIMove(int fieldNumber) {
