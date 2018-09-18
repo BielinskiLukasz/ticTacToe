@@ -1,6 +1,6 @@
 package com.bielinski.ticTacToe;
 
-class WinnerFinder {
+class GameStatusChecker {
 
     static boolean isWinner(int[] checkBoard) {
         return isItAWinningCombination(checkBoard[0], checkBoard[1], checkBoard[2]) ||

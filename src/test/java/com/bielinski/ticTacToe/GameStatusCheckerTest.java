@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WinnerFinderTest {
+public class GameStatusCheckerTest {
 
     @Test
     public void shouldReturnTrueWhenCheckWinnerForXXXOO_O__Board() {
@@ -15,7 +15,7 @@ public class WinnerFinderTest {
                 -1, 0, 0
         }; //TODO Replace 1 and -1 with PLAYER signs (Whole project)!
         //when
-        boolean isWinner = WinnerFinder.isWinner(checkBoard);
+        boolean isWinner = GameStatusChecker.isWinner(checkBoard);
         //then
         assertThat(isWinner).isTrue();
     }
@@ -29,7 +29,7 @@ public class WinnerFinderTest {
                 0, -1, 0
         };
         //when
-        boolean isWinner = WinnerFinder.isWinner(checkBoard);
+        boolean isWinner = GameStatusChecker.isWinner(checkBoard);
         //then
         assertThat(isWinner).isTrue();
     }
@@ -43,7 +43,7 @@ public class WinnerFinderTest {
                 1, 1, 1
         };
         //when
-        boolean isWinner = WinnerFinder.isWinner(checkBoard);
+        boolean isWinner = GameStatusChecker.isWinner(checkBoard);
         //then
         assertThat(isWinner).isTrue();
     }
@@ -57,7 +57,7 @@ public class WinnerFinderTest {
                 1, 1, -1
         };
         //when
-        boolean isWinner = WinnerFinder.isWinner(checkBoard);
+        boolean isWinner = GameStatusChecker.isWinner(checkBoard);
         //then
         assertThat(isWinner).isTrue();
     }
@@ -71,7 +71,7 @@ public class WinnerFinderTest {
                 0, 1, -1
         };
         //when
-        boolean isWinner = WinnerFinder.isWinner(checkBoard);
+        boolean isWinner = GameStatusChecker.isWinner(checkBoard);
         //then
         assertThat(isWinner).isTrue();
     }
@@ -85,7 +85,7 @@ public class WinnerFinderTest {
                 -1, 0, 1
         };
         //when
-        boolean isWinner = WinnerFinder.isWinner(checkBoard);
+        boolean isWinner = GameStatusChecker.isWinner(checkBoard);
         //then
         assertThat(isWinner).isTrue();
     }
@@ -99,7 +99,7 @@ public class WinnerFinderTest {
                 -1, -1, 1
         };
         //when
-        boolean isWinner = WinnerFinder.isWinner(checkBoard);
+        boolean isWinner = GameStatusChecker.isWinner(checkBoard);
         //then
         assertThat(isWinner).isTrue();
     }
@@ -113,7 +113,7 @@ public class WinnerFinderTest {
                 1, 0, 0
         };
         //when
-        boolean isWinner = WinnerFinder.isWinner(checkBoard);
+        boolean isWinner = GameStatusChecker.isWinner(checkBoard);
         //then
         assertThat(isWinner).isTrue();
     }
@@ -127,7 +127,7 @@ public class WinnerFinderTest {
                 1, 0, 0
         };
         //when
-        boolean isWinner = WinnerFinder.isWinner(checkBoard);
+        boolean isWinner = GameStatusChecker.isWinner(checkBoard);
         //then
         assertThat(isWinner).isTrue();
     }
@@ -141,7 +141,7 @@ public class WinnerFinderTest {
                 0, 0, 0
         };
         //when
-        boolean isWinner = WinnerFinder.isWinner(checkBoard);
+        boolean isWinner = GameStatusChecker.isWinner(checkBoard);
         //then
         assertThat(isWinner).isFalse();
     }
@@ -155,7 +155,7 @@ public class WinnerFinderTest {
                 1, 0, 1
         };
         //when
-        boolean isWinner = WinnerFinder.isWinner(checkBoard);
+        boolean isWinner = GameStatusChecker.isWinner(checkBoard);
         //then
         assertThat(isWinner).isFalse();
     }
@@ -169,7 +169,7 @@ public class WinnerFinderTest {
                 1, 1, -1
         };
         //when
-        boolean isDraw = WinnerFinder.isDraw(checkBoard);
+        boolean isDraw = GameStatusChecker.isDraw(checkBoard);
         //then
         assertThat(isDraw).isTrue();
     }
@@ -183,7 +183,7 @@ public class WinnerFinderTest {
                 0, 0, 0
         };
         //when
-        boolean isDraw = WinnerFinder.isDraw(checkBoard);
+        boolean isDraw = GameStatusChecker.isDraw(checkBoard);
         //then
         assertThat(isDraw).isFalse();
     }
@@ -197,7 +197,7 @@ public class WinnerFinderTest {
                 0, 0, -1
         };
         //when
-        boolean isDraw = WinnerFinder.isDraw(checkBoard);
+        boolean isDraw = GameStatusChecker.isDraw(checkBoard);
         //then
         assertThat(isDraw).isFalse();
     }

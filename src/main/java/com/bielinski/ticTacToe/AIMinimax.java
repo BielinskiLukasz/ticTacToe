@@ -33,9 +33,9 @@ class AIMinimax {
             Player actualPlayer,
             int actualAlgorithmDepth) {
 
-        if (WinnerFinder.isWinner(boardsFields)) {
+        if (GameStatusChecker.isWinner(boardsFields)) {
             fieldPointValue[checkedFieldIndex] += actualPlayer == Player.X ? pointsForWining : -pointsForWining;
-        } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH && !WinnerFinder.isDraw(boardsFields)) {
+        } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH && !GameStatusChecker.isDraw(boardsFields)) {
             int[] localBoardFields = new int[9];
             System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldPointValue.length);
             for (int i = 0; i < fieldPointValue.length; i++) {
