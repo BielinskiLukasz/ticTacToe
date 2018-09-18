@@ -15,11 +15,11 @@ class AIController {
 //        minimaxBoard = new int[9];
     }
 
-    void moveAI() {
+    void moveAI() { //TODO How to test that?
         int[] boardsFields = new int[9]; //TODO Remove hardcode 9
-        System.arraycopy(controller.model.getFields(), 0, boardsFields, 0, boardsFields.length);
-        controller.moveAI(AIminimax.chooseFieldForAI(boardsFields)); //TODO uncomment after tests
-//        controller.moveAI(AIminimax.testPhase(boardsFields)); //TODO Remove after debug
+        System.arraycopy(controller.model.getFields(), 0, boardsFields, 0, boardsFields.length); //TODO Refactor controller.model snake
+        controller.moveAI(AIMinimax.chooseFieldForAI(boardsFields)); //TODO uncomment after tests
+//        controller.moveAI(AIMinimax.testPhase(boardsFields)); //TODO Remove after debug
     }
 
 //    private int chooseFieldForAI() {
