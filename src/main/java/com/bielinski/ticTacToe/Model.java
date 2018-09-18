@@ -3,48 +3,56 @@ package com.bielinski.ticTacToe;
 class Model {
 
     private final BoardController controller;
-    AIminimax ai;
+    AIMinimax ai;
 
     private final int[] fields;
-    private boolean playerX;
-    private final boolean againstAI;
+    //    private final boolean gameAgainstAI;
+    Player currentPlayer;
 
-    Model(BoardController controller, boolean againstAI) {
+    Model(BoardController controller) {
         this.controller = controller;
-        this.againstAI = againstAI;
+//        this.gameAgainstAI = false;
         fields = new int[9];
         randomChooseFirstPlayer();
     }
 
-    boolean isPlayerX() {
-        return playerX;
+//    Model(BoardController controller, boolean gameAgainstAI) {
+//        this.controller = controller;
+////        this.gameAgainstAI = gameAgainstAI;
+//        fields = new int[9];
+//        randomChooseFirstPlayer();
+//    }
+
+    private void randomChooseFirstPlayer() {
+        currentPlayer = (Math.random() < 0.5) ? Player.X : Player.O; //TODO New code
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     int[] getFields() {
         return fields;
     }
 
-    boolean isAgainstAI() {
-        return againstAI;
-    }
-
-    private void randomChooseFirstPlayer() {
-        playerX = (Math.random() < 0.5);
-    }
+//    boolean isGameAgainstAI() {
+//        return gameAgainstAI;
+//    }
 
     void takeField(int fieldNumber) {
-        if (isAvailable(fieldNumber)) fields[fieldNumber] = playerX ? 1 : -1;
+        if (isFieldAvailable(fieldNumber)) fields[fieldNumber] = currentPlayer == Player.X ? 1 : -1;
     }
 
     void afterMoveDataChange() {
-        switchPlayer(playerX);
+        switchPlayer();
     }
 
-    private void switchPlayer(boolean currentPlayerIsPlayerX) {
-        playerX = !currentPlayerIsPlayerX;
+    private void switchPlayer() {
+//        currentPlayer = currentPlayer == Player.X ? Player.O : Player.X;
+        currentPlayer = currentPlayer.nextPlayer();
     }
 
-    boolean isAvailable(int fieldNumber) {
+    boolean isFieldAvailable(int fieldNumber) {
         return fields[fieldNumber] == 0;
     }
 
@@ -105,10 +113,6 @@ class Model {
         for (int i = 0; i < fields.length; i++) {
             fields[i] = 0;
         }
-        if (ai != null) ai.resetAIData();
-    }
-
-    void initializeAIData() {
-        ai = new AIminimax(this, controller);
+//        if (ai != null) ai.resetAIData(); //TODO Correct this
     }
 }
