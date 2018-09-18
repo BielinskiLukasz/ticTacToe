@@ -1,6 +1,6 @@
 package com.bielinski.ticTacToe;
 
-class AIminimax {
+class AIMinimax {
 
     private final static int MINIMAX_ALGORITHM_DEPTH = 9;
 
@@ -16,8 +16,8 @@ class AIminimax {
                 calculateMinimaxAlgorithmForActualBoard(
                         localBoardFields,
                         i,
-                        (int) Math.pow(2, 9),
-                        Player.O,
+                        (int) Math.pow(9, 10),
+                        Player.X,
                         0);
             } else {
                 fieldPointValue[i] = Integer.MIN_VALUE;
@@ -34,18 +34,21 @@ class AIminimax {
             int actualAlgorithmDepth) {
 
         if (WinnerFinder.isWinner(boardsFields)) {
-            fieldPointValue[checkedFieldIndex] += actualPlayer == Player.X ? -pointsForWining : pointsForWining;
+            fieldPointValue[checkedFieldIndex] += actualPlayer == Player.X ? pointsForWining : -pointsForWining;
         } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH && !WinnerFinder.isDraw(boardsFields)) {
             int[] localBoardFields = new int[9];
             System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldPointValue.length);
             for (int i = 0; i < fieldPointValue.length; i++) {
-                localBoardFields[i] = actualPlayer == Player.X ? 1 : -1;
-                calculateMinimaxAlgorithmForActualBoard(
-                        localBoardFields,
-                        checkedFieldIndex,
-                        pointsForWining / 2,
-                        actualPlayer.nextPlayer(),
-                        ++actualAlgorithmDepth);
+                if (localBoardFields[i] == 0) {
+                    localBoardFields[i] = actualPlayer == Player.X ? 1 : -1;
+                    calculateMinimaxAlgorithmForActualBoard(
+                            localBoardFields,
+                            checkedFieldIndex,
+                            pointsForWining / 9,
+                            actualPlayer.nextPlayer(),
+                            ++actualAlgorithmDepth);
+                    localBoardFields[i] = 0;
+                }
             }
         }
     }
