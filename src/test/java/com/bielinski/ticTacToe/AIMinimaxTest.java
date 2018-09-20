@@ -49,6 +49,34 @@ public class AIMinimaxTest {
     }
 
     @Test
+    public void shouldReturn4IfPlayerDidntStartThere() {
+        //given
+        int[] boardsFields = {
+                0, 0, 1,
+                0, 0, 0,
+                0, 0, 0
+        };
+        //when
+        int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);
+        //then
+        assertThat(bestFieldIndex).isEqualTo(4);
+    }
+
+    @Test
+    public void shouldReturn4forAIToWinTheGame() {
+        //given
+        int[] boardsFields = {
+                -1, 0, 1,
+                0, 0, 0,
+                1, 0, -1
+        };
+        //when
+        int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);
+        //then
+        assertThat(bestFieldIndex).isEqualTo(4);
+    }
+
+    @Test
     public void shouldReturn0WhenItsOnlyOneEmptyField() {
         //given
         int[] boardsFields = {

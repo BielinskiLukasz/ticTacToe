@@ -4,26 +4,29 @@ class AIMinimax {
 
     private final static int MINIMAX_ALGORITHM_DEPTH = 9;
 
-    private static int[] fieldPointValue;
+    private static int[] fieldPointValues;
 
     static int chooseFieldForAI(int[] boardsFields) {
-        fieldPointValue = new int[boardsFields.length];
-        for (int i = 0; i < fieldPointValue.length; i++) {
+        fieldPointValues = new int[boardsFields.length];
+        for (int i = 0; i < fieldPointValues.length; i++) {
             if (boardsFields[i] == 0) {
                 int[] localBoardFields = new int[9];
-                System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldPointValue.length);
+                System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldPointValues.length);
                 localBoardFields[i] = -1;
                 calculateMinimaxAlgorithmForActualBoard(
                         localBoardFields,
                         i,
-                        (int) Math.pow(9, 10),
+                        (int) Math.pow(10, 9),
                         Player.X,
                         0);
             } else {
-                fieldPointValue[i] = Integer.MIN_VALUE;
+                fieldPointValues[i] = Integer.MIN_VALUE;
             }
         }
-        return findBestFieldIndex(fieldPointValue);
+        for (int fieldPointValue : fieldPointValues) { //TODO only for test
+            System.out.println(fieldPointValue);
+        }
+        return findBestFieldIndex(fieldPointValues);
     }
 
     private static void calculateMinimaxAlgorithmForActualBoard(
@@ -32,19 +35,18 @@ class AIMinimax {
             int pointsForWining,
             Player actualPlayer,
             int actualAlgorithmDepth) {
-
         if (GameStatusChecker.isWinner(boardsFields)) {
-            fieldPointValue[checkedFieldIndex] += actualPlayer == Player.X ? pointsForWining : -pointsForWining;
+            fieldPointValues[checkedFieldIndex] += actualPlayer == Player.X ? pointsForWining : -pointsForWining;
         } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH && !GameStatusChecker.isDraw(boardsFields)) {
             int[] localBoardFields = new int[9];
-            System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldPointValue.length);
-            for (int i = 0; i < fieldPointValue.length; i++) {
+            System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldPointValues.length);
+            for (int i = 0; i < fieldPointValues.length; i++) {
                 if (localBoardFields[i] == 0) {
                     localBoardFields[i] = actualPlayer == Player.X ? 1 : -1;
                     calculateMinimaxAlgorithmForActualBoard(
                             localBoardFields,
                             checkedFieldIndex,
-                            pointsForWining / 9,
+                            pointsForWining / 10,
                             actualPlayer.nextPlayer(),
                             ++actualAlgorithmDepth);
                     localBoardFields[i] = 0;
