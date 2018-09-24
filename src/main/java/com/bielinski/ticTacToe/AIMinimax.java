@@ -4,52 +4,129 @@ class AIMinimax {
 
     private final static int MINIMAX_ALGORITHM_DEPTH = 9;
 
-    private static int[] fieldPointValues;
+    private static int[] fieldsScores;
+    private static int[] algorithmCall; //TODO only for test
 
     static int chooseFieldForAI(int[] boardsFields) {
-        fieldPointValues = new int[boardsFields.length];
-        for (int i = 0; i < fieldPointValues.length; i++) {
+        algorithmCall = new int[9]; //TODO only for test;
+        fieldsScores = new int[9];
+        for (int i = 0; i < boardsFields.length; i++) {
             if (boardsFields[i] == 0) {
                 int[] localBoardFields = new int[9];
-                System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldPointValues.length);
+                System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldsScores.length);
                 localBoardFields[i] = -1;
-                calculateMinimaxAlgorithmForActualBoard(
-                        localBoardFields,
-                        i,
-                        (int) Math.pow(10, 9),
+                fieldsScores[i] += calculateMinimaxAlgorithmForActualBoard(localBoardFields,
                         Player.X,
                         0);
             } else {
-                fieldPointValues[i] = Integer.MIN_VALUE;
+                fieldsScores[i] = Integer.MIN_VALUE;
             }
         }
-        for (int fieldPointValue : fieldPointValues) { //TODO only for test
+
+        System.out.println("Scores: ");
+        for (int fieldPointValue : fieldsScores) { //TODO only for test
             System.out.println(fieldPointValue);
         }
-        return findBestFieldIndex(fieldPointValues);
+
+        return findBestFieldIndex(fieldsScores);
+
     }
 
-    private static void calculateMinimaxAlgorithmForActualBoard(
+    private static int calculateMinimaxAlgorithmForActualBoard(int[] boardsFields,
+                                                               Player actualPlayer,
+                                                               int actualAlgorithmDepth) {
+        if (GameStatusChecker.isWinner(boardsFields)) {
+            int score = (int) Math.pow(10, MINIMAX_ALGORITHM_DEPTH - actualAlgorithmDepth + 1);
+//            System.out.println("For below: " + (actualPlayer == Player.X ? score : -score)); // TODO tests...
+//            for (int boardsField : boardsFields) { // TODO tests...
+//                System.out.print(boardsField + " ");
+//            }
+//            System.out.println(); // TODO tests...
+            return actualPlayer == Player.X ? score : -score;
+        } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH/* && !GameStatusChecker.isDraw(boardsFields)*/) {
+            int score = 0;
+            for (int i = 0; i < boardsFields.length; i++) {
+                if (boardsFields[i] == 0) {
+//                    System.out.println(actualAlgorithmDepth);
+//                    for (int boardsField : boardsFields) { // TODO tests...
+//                        System.out.print(boardsField + " ");
+//                    }
+//                    System.out.println(); // TODO tests...
+                    int[] localBoardFields = new int[9];
+                    System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldsScores.length);
+                    localBoardFields[i] = actualPlayer == Player.X ? 1 : -1;
+                    score += calculateMinimaxAlgorithmForActualBoard(localBoardFields,
+                            actualPlayer.nextPlayer(),
+                            actualAlgorithmDepth + 1);
+                }
+            }
+            return score;
+        }
+        return 0;
+    }
+
+    static int chooseFieldForAIOld(int[] boardsFields) {
+//        System.out.println("START"); // TODO tests...
+        algorithmCall = new int[9]; //TODO only for test
+        fieldsScores = new int[boardsFields.length];
+        for (int i = 0; i < fieldsScores.length; i++) {
+            if (boardsFields[i] == 0) {
+                int[] localBoardFields = new int[9];
+                System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldsScores.length);
+                localBoardFields[i] = -1;
+                calculateMinimaxAlgorithmForActualBoardOld(
+                        localBoardFields,
+                        i,
+                        (int) Math.pow(10, MINIMAX_ALGORITHM_DEPTH),
+                        Player.X,
+                        0);
+            } else {
+                fieldsScores[i] = Integer.MIN_VALUE;
+            }
+        }
+        for (int fieldPointValue : fieldsScores) { //TODO only for test
+            System.out.println(fieldPointValue);
+        }
+        for (int i : algorithmCall) { //TODO only for test
+            System.out.println(i);
+        }
+
+        return findBestFieldIndex(fieldsScores);
+    }
+
+    private static void calculateMinimaxAlgorithmForActualBoardOld(
             int[] boardsFields,
             int checkedFieldIndex,
             int pointsForWining,
             Player actualPlayer,
             int actualAlgorithmDepth) {
+        algorithmCall[checkedFieldIndex]++; //TODO only for test
+
         if (GameStatusChecker.isWinner(boardsFields)) {
-            fieldPointValues[checkedFieldIndex] += actualPlayer == Player.X ? pointsForWining : -pointsForWining;
-        } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH && !GameStatusChecker.isDraw(boardsFields)) {
-            int[] localBoardFields = new int[9];
-            System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldPointValues.length);
-            for (int i = 0; i < fieldPointValues.length; i++) {
-                if (localBoardFields[i] == 0) {
+            fieldsScores[checkedFieldIndex] += actualPlayer == Player.X ? pointsForWining : -pointsForWining;
+            System.out.println("For " + checkedFieldIndex + ": " + (actualPlayer == Player.X ? pointsForWining : -pointsForWining)); // TODO tests...
+            for (int boardsField : boardsFields) { // TODO tests...
+                System.out.print(boardsField + " ");
+            }
+            System.out.println(); // TODO tests...
+        } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH/* && !GameStatusChecker.isDraw(boardsFields)*/) {
+            for (int i = 0; i < fieldsScores.length; i++) {
+                if (boardsFields[i] == 0) {
+                    int[] localBoardFields = new int[9];
+                    System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldsScores.length);
                     localBoardFields[i] = actualPlayer == Player.X ? 1 : -1;
-                    calculateMinimaxAlgorithmForActualBoard(
+                    for (int boardsField : boardsFields) { // TODO tests...
+                        System.out.print(boardsField + " ");
+                    }
+                    System.out.println(); // TODO tests...
+                    calculateMinimaxAlgorithmForActualBoardOld(
                             localBoardFields,
                             checkedFieldIndex,
                             pointsForWining / 10,
                             actualPlayer.nextPlayer(),
                             ++actualAlgorithmDepth);
-                    localBoardFields[i] = 0;
+                    System.out.println("------------------");
+//                    localBoardFields[i] = 0;
                 }
             }
         }
