@@ -146,4 +146,18 @@ public class AIMinimaxTest {
         assertThat(bestFieldIndex).isEqualTo(5);
     }
 
+    @Test
+    public void shouldReturn1toPreventThePlayerFromWinning() {
+        //given
+        int[] boardsFields = {
+                0, 0, 1,
+                0, -1, 0,
+                1, 0, 0
+        };
+        //when
+        int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);
+        //then
+        assertThat(bestFieldIndex).isEqualTo(1);
+    }
+
 }
