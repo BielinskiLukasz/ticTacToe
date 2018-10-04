@@ -3,6 +3,7 @@ package com.bielinski.ticTacToe;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class AIMinimaxTest {
 
@@ -105,7 +106,7 @@ public class AIMinimaxTest {
     }
 
     @Test
-    public void shouldReturn3forAIToWinTheGame() {
+    public void shouldReturn3Or4forAIToWinTheGame() {
         //given
         int[] boardsFields = {
                 -1, 1, 0,
@@ -115,7 +116,7 @@ public class AIMinimaxTest {
         //when
         int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);
         //then
-        assertThat(bestFieldIndex).isEqualTo(3);
+        assertTrue(bestFieldIndex == 3 || bestFieldIndex == 4);
     }
 
     @Test
@@ -147,7 +148,7 @@ public class AIMinimaxTest {
     }
 
     @Test
-    public void shouldReturn1toPreventThePlayerFromWinning() {
+    public void shouldReturn1Or7toPreventThePlayerFromWinning() {
         //given
         int[] boardsFields = {
                 0, 0, 1,
@@ -157,7 +158,21 @@ public class AIMinimaxTest {
         //when
         int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);
         //then
-        assertThat(bestFieldIndex).isEqualTo(1);
+        assertTrue(bestFieldIndex == 1 || bestFieldIndex == 7);
+    }
+
+    @Test
+    public void shouldReturn2Or6toPreventThePlayerFromWinning() {
+        //given
+        int[] boardsFields = {
+                1, 0, 0,
+                0, 1, 0,
+                0, 0, -1
+        };
+        //when
+        int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);
+        //then
+        assertTrue(bestFieldIndex == 2 || bestFieldIndex == 6);
     }
 
 }
