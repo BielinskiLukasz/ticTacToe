@@ -1,5 +1,7 @@
 package com.bielinski.ticTacToe;
 
+import java.util.Arrays;
+
 class AIMinimax {
 
     private final static int MINIMAX_ALGORITHM_DEPTH = 9;
@@ -11,22 +13,26 @@ class AIMinimax {
         algorithmCall = new int[9]; //TODO only for test;
         fieldsScores = new int[9];
         for (int i = 0; i < boardsFields.length; i++) {
+//            System.out.println("----------" + i + "----------"); //TODO tests
             if (boardsFields[i] == 0) {
                 int[] localBoardFields = new int[9];
                 System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldsScores.length);
                 localBoardFields[i] = -1;
-                fieldsScores[i] += calculateMinimaxAlgorithmForActualBoard(localBoardFields,
+                fieldsScores[i] = calculateMinimaxAlgorithmForActualBoard(localBoardFields,
                         Player.X,
                         0);
             } else {
-                fieldsScores[i] = Integer.MIN_VALUE;
+                fieldsScores[i] = -99;
             }
+//            for (int j = 0; j < 1; j++) //TODO tests
+//                System.out.print("\t"); //TODO tests
+//            System.out.println("\nFinal select: " + fieldsScores[i]); //TODO tests
         }
 
-        System.out.println("Scores: ");
-        for (int fieldPointValue : fieldsScores) { //TODO only for test
-            System.out.println(fieldPointValue);
-        }
+//        System.out.println("Scores: ");
+//        for (int fieldPointValue : fieldsScores) { //TODO only for test
+//            System.out.println(fieldPointValue);
+//        }
 
         return findBestFieldIndex(fieldsScores);
 
@@ -36,15 +42,15 @@ class AIMinimax {
                                                                Player actualPlayer,
                                                                int actualAlgorithmDepth) {
         if (GameStatusChecker.isWinner(boardsFields)) {
-            int score = (int) Math.pow(10, MINIMAX_ALGORITHM_DEPTH - actualAlgorithmDepth + 1);
+            int score = (MINIMAX_ALGORITHM_DEPTH - actualAlgorithmDepth + 1);
 //            System.out.println("For below: " + (actualPlayer == Player.X ? score : -score)); // TODO tests...
 //            for (int boardsField : boardsFields) { // TODO tests...
 //                System.out.print(boardsField + " ");
 //            }
 //            System.out.println(); // TODO tests...
             return actualPlayer == Player.X ? score : -score;
-        } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH/* && !GameStatusChecker.isDraw(boardsFields)*/) {
-            int score = 0;
+        } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH && !GameStatusChecker.isDraw(boardsFields)) {
+            int[] scores = new int[9];
             for (int i = 0; i < boardsFields.length; i++) {
                 if (boardsFields[i] == 0) {
 //                    System.out.println(actualAlgorithmDepth);
@@ -55,12 +61,28 @@ class AIMinimax {
                     int[] localBoardFields = new int[9];
                     System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldsScores.length);
                     localBoardFields[i] = actualPlayer == Player.X ? 1 : -1;
-                    score += calculateMinimaxAlgorithmForActualBoard(localBoardFields,
+                    scores[i] += calculateMinimaxAlgorithmForActualBoard(localBoardFields,
                             actualPlayer.nextPlayer(),
                             actualAlgorithmDepth + 1);
+                } else {
+                    scores[i] = actualPlayer == Player.X ? 99 : -99;
                 }
             }
-            return score;
+//            System.out.print("\nTaken " + (actualAlgorithmDepth + 4)); //TODO tests
+//            if ((actualPlayer == Player.X ? // TODO Tests
+//                    Arrays.stream(scores).min().getAsInt() : Arrays.stream(scores).max().getAsInt()) != 99 && // TODO Tests
+//                    (actualPlayer == Player.X ? // TODO Tests
+//                            Arrays.stream(scores).min().getAsInt() : Arrays.stream(scores).max().getAsInt()) != -99) { // TODO Tests
+//                for (int j = 0; j < actualAlgorithmDepth + 1; j++) //TODO tests
+//                    System.out.print("\t"); //TODO tests
+//                for (int j = 0; j < 9; j++) { // TODO Tests
+//                    System.out.print("\t" + scores[j]); // TODO Tests
+//                } // TODO Tests
+//                System.out.print("\t" + actualPlayer.name() + " selected: " + (actualPlayer == Player.X ?
+//                        Arrays.stream(scores).min().getAsInt() : Arrays.stream(scores).max().getAsInt()));// TODO Tests
+//            } // TODO Tests
+            return actualPlayer == Player.X ?
+                    Arrays.stream(scores).min().getAsInt() : Arrays.stream(scores).max().getAsInt();
         }
         return 0;
     }
@@ -84,12 +106,12 @@ class AIMinimax {
                 fieldsScores[i] = Integer.MIN_VALUE;
             }
         }
-        for (int fieldPointValue : fieldsScores) { //TODO only for test
-            System.out.println(fieldPointValue);
-        }
-        for (int i : algorithmCall) { //TODO only for test
-            System.out.println(i);
-        }
+//        for (int fieldPointValue : fieldsScores) { //TODO only for test
+//            System.out.println(fieldPointValue);
+//        }
+//        for (int i : algorithmCall) { //TODO only for test
+//            System.out.println(i);
+//        }
 
         return findBestFieldIndex(fieldsScores);
     }
@@ -104,21 +126,21 @@ class AIMinimax {
 
         if (GameStatusChecker.isWinner(boardsFields)) {
             fieldsScores[checkedFieldIndex] += actualPlayer == Player.X ? pointsForWining : -pointsForWining;
-            System.out.println("For " + checkedFieldIndex + ": " + (actualPlayer == Player.X ? pointsForWining : -pointsForWining)); // TODO tests...
-            for (int boardsField : boardsFields) { // TODO tests...
-                System.out.print(boardsField + " ");
-            }
-            System.out.println(); // TODO tests...
+//            System.out.println("For " + checkedFieldIndex + ": " + (actualPlayer == Player.X ? pointsForWining : -pointsForWining)); // TODO tests...
+//            for (int boardsField : boardsFields) { // TODO tests...
+//                System.out.print(boardsField + " ");
+//            }
+//            System.out.println(); // TODO tests...
         } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH/* && !GameStatusChecker.isDraw(boardsFields)*/) {
             for (int i = 0; i < fieldsScores.length; i++) {
                 if (boardsFields[i] == 0) {
                     int[] localBoardFields = new int[9];
                     System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldsScores.length);
                     localBoardFields[i] = actualPlayer == Player.X ? 1 : -1;
-                    for (int boardsField : boardsFields) { // TODO tests...
-                        System.out.print(boardsField + " ");
-                    }
-                    System.out.println(); // TODO tests...
+//                    for (int boardsField : boardsFields) { // TODO tests...
+//                        System.out.print(boardsField + " ");
+//                    }
+//                    System.out.println(); // TODO tests...
                     calculateMinimaxAlgorithmForActualBoardOld(
                             localBoardFields,
                             checkedFieldIndex,
@@ -133,12 +155,15 @@ class AIMinimax {
     }
 
     static int findBestFieldIndex(int[] fieldPointValue) {
-        int maxValue = Integer.MIN_VALUE;
+        int maxValue = Arrays.stream(fieldPointValue).max().getAsInt();
         int bestFieldIndex = fieldPointValue.length / 2;
 
+        if (fieldPointValue[bestFieldIndex] == Arrays.stream(fieldPointValue).max().getAsInt()) {
+            return bestFieldIndex;
+        }
+
         for (int i = 0; i < fieldPointValue.length; i++) {
-            if (fieldPointValue[i] > maxValue) {
-                maxValue = fieldPointValue[i];
+            if (fieldPointValue[i] == maxValue) {
                 bestFieldIndex = i;
             }
         }
