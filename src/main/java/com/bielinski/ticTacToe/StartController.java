@@ -5,5 +5,4 @@ public class StartController {
     public StartController() {
         new StartView();
     }
-
 }

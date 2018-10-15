@@ -174,5 +174,4 @@ public class AIMinimaxTest {
         //then
         assertTrue(bestFieldIndex == 2 || bestFieldIndex == 6);
     }
-
 }

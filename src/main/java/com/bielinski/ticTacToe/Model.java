@@ -3,41 +3,23 @@ package com.bielinski.ticTacToe;
 class Model {
 
     private final BoardController controller;
-    AIMinimax ai;
 
     private final int[] fields;
-    //    private final boolean gameAgainstAI;
     Player currentPlayer;
 
     Model(BoardController controller) {
         this.controller = controller;
-//        this.gameAgainstAI = false;
         fields = new int[9];
         randomChooseFirstPlayer();
     }
-
-//    Model(BoardController controller, boolean gameAgainstAI) {
-//        this.controller = controller;
-////        this.gameAgainstAI = gameAgainstAI;
-//        fields = new int[9];
-//        randomChooseFirstPlayer();
-//    }
 
     private void randomChooseFirstPlayer() {
         currentPlayer = (Math.random() < 0.5) ? Player.X : Player.O; //TODO New code
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
     int[] getFields() {
         return fields;
     }
-
-//    boolean isGameAgainstAI() {
-//        return gameAgainstAI;
-//    }
 
     void takeField(int fieldNumber) {
         if (isFieldAvailable(fieldNumber)) fields[fieldNumber] = currentPlayer == Player.X ? 1 : -1;
@@ -48,11 +30,10 @@ class Model {
     }
 
     private void switchPlayer() {
-//        currentPlayer = currentPlayer == Player.X ? Player.O : Player.X;
         currentPlayer = currentPlayer.nextPlayer();
     }
 
-    boolean isFieldAvailable(int fieldNumber) {
+    private boolean isFieldAvailable(int fieldNumber) {
         return fields[fieldNumber] == 0;
     }
 
@@ -113,6 +94,5 @@ class Model {
         for (int i = 0; i < fields.length; i++) {
             fields[i] = 0;
         }
-//        if (ai != null) ai.resetAIData(); //TODO Correct this
     }
 }
