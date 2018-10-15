@@ -21,7 +21,7 @@ abstract class BoardController {
     void afterMove() {
         boolean gameEnds = false;
 
-        if (model.isWinner(model.getFields())) { //TODO Uncomment that piece of code after debug
+        if (model.isWinner(model.getFields())) {
             gameEnds = true;
             view.showWinningCombination(model.takeWinningCombination());
             view.showWinner(model.currentPlayer == Player.X);

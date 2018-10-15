@@ -7,14 +7,12 @@ class AIMinimax {
     private final static int MINIMAX_ALGORITHM_DEPTH = 9;
 
     private static int[] fieldsScores;
-    private static int[] algorithmCall; //TODO only for test
 
     static int chooseFieldForAI(int[] boardsFields) {
-        algorithmCall = new int[9]; //TODO only for test;
-        fieldsScores = new int[9];
+        fieldsScores = new int[Model.BOARD_FIELDS_NUMNER];
         for (int i = 0; i < boardsFields.length; i++) {
             if (boardsFields[i] == 0) {
-                int[] localBoardFields = new int[9];
+                int[] localBoardFields = new int[Model.BOARD_FIELDS_NUMNER];
                 System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldsScores.length);
                 localBoardFields[i] = -1;
                 fieldsScores[i] = calculateMinimaxAlgorithmForActualBoard(localBoardFields,
@@ -35,7 +33,7 @@ class AIMinimax {
             int score = (MINIMAX_ALGORITHM_DEPTH - actualAlgorithmDepth + 1);
             return actualPlayer == Player.X ? score : -score;
         } else if (actualAlgorithmDepth < MINIMAX_ALGORITHM_DEPTH && !GameStatusChecker.isDraw(boardsFields)) {
-            int[] scores = new int[9];
+            int[] scores = new int[Model.BOARD_FIELDS_NUMNER];
             for (int i = 0; i < boardsFields.length; i++) {
                 if (boardsFields[i] == 0) {
                     int[] localBoardFields = new int[9];

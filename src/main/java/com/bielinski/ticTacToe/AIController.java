@@ -9,8 +9,8 @@ class AIController {
     }
 
     void moveAI() { //TODO How to test that?
-        int[] boardsFields = new int[9]; //TODO Remove hardcode 9
+        int[] boardsFields = new int[Model.BOARD_FIELDS_NUMNER];
         System.arraycopy(controller.model.getFields(), 0, boardsFields, 0, boardsFields.length); //TODO Refactor controller.model snake
-        controller.moveAI(AIMinimax.chooseFieldForAI(boardsFields)); //TODO uncomment after tests
+        controller.moveAI(AIMinimax.chooseFieldForAI(boardsFields));
     }
 }
