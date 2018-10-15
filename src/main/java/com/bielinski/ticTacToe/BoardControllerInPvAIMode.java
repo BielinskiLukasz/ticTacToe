@@ -23,6 +23,13 @@ class BoardControllerInPvAIMode extends BoardController {
 
     void afterMoveAction() {
         afterMove();
-        if (model.currentPlayer == Player.O) ai.moveAI();
+        if (model.currentPlayer == Player.O)
+            ai.moveAI();
+    }
+
+    void restartGame() {
+        super.restartGame();
+        if (model.currentPlayer == Player.O)
+            ai.moveAI();
     }
 }
