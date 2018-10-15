@@ -7,4 +7,8 @@ public enum Player {
     public Player nextPlayer() {
         return this == X ? O : X;
     }
+
+    public static Player randomChooseFirstPlayer() {
+        return (Math.random() < 0.5) ? Player.X : Player.O;
+    }
 }

@@ -2,19 +2,15 @@ package com.bielinski.ticTacToe;
 
 class Model {
 
+    static final int BOARD_FIELDS_NUMNER = 9;
     private final BoardController controller;
-
     private final int[] fields;
     Player currentPlayer;
 
     Model(BoardController controller) {
         this.controller = controller;
-        fields = new int[9];
-        randomChooseFirstPlayer();
-    }
-
-    private void randomChooseFirstPlayer() {
-        currentPlayer = (Math.random() < 0.5) ? Player.X : Player.O; //TODO New code
+        fields = new int[BOARD_FIELDS_NUMNER];
+        currentPlayer = Player.randomChooseFirstPlayer();
     }
 
     int[] getFields() {
@@ -90,7 +86,7 @@ class Model {
     }
 
     void resetData() {
-        randomChooseFirstPlayer();
+        currentPlayer = Player.randomChooseFirstPlayer();
         for (int i = 0; i < fields.length; i++) {
             fields[i] = 0;
         }
