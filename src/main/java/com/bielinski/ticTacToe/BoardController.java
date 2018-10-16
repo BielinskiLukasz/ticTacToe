@@ -21,11 +21,11 @@ abstract class BoardController {
     void afterMove() {
         boolean gameEnds = false;
 
-        if (model.isWinner(model.getFields())) {
+        if (GameStatusChecker.isWinner(model.getFields())) {
             gameEnds = true;
-            view.showWinningCombination(model.takeWinningCombination());
+            view.showWinningCombination(GameStatusChecker.takeWinningCombination(model.getFields()));
             view.showWinner(model.currentPlayer == Player.X);
-        } else if (model.isDraw()) {
+        } else if (GameStatusChecker.isDraw(model.getFields())) {
             gameEnds = true;
             view.showDraw();
         }
