@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 class AIMinimax {
 
-    private final static int MINIMAX_ALGORITHM_DEPTH = 9;
-
     private static int[] fieldsScores;
+    private final static int MINIMAX_ALGORITHM_DEPTH = Model.BOARD_FIELDS_NUMNER;
+    private final static int OCCUPIED_FIELD_SCORE = 99;
 
     static int chooseFieldForAI(int[] boardsFields) {
         fieldsScores = new int[Model.BOARD_FIELDS_NUMNER];
@@ -19,7 +19,7 @@ class AIMinimax {
                         Player.X,
                         0);
             } else {
-                fieldsScores[i] = -99;
+                fieldsScores[i] = -OCCUPIED_FIELD_SCORE;
             }
         }
 
@@ -36,14 +36,14 @@ class AIMinimax {
             int[] scores = new int[Model.BOARD_FIELDS_NUMNER];
             for (int i = 0; i < boardsFields.length; i++) {
                 if (boardsFields[i] == 0) {
-                    int[] localBoardFields = new int[9];
+                    int[] localBoardFields = new int[Model.BOARD_FIELDS_NUMNER];
                     System.arraycopy(boardsFields, 0, localBoardFields, 0, fieldsScores.length);
                     localBoardFields[i] = actualPlayer == Player.X ? 1 : -1;
                     scores[i] += calculateMinimaxAlgorithmForActualBoard(localBoardFields,
                             actualPlayer.nextPlayer(),
                             actualAlgorithmDepth + 1);
                 } else {
-                    scores[i] = actualPlayer == Player.X ? 99 : -99;
+                    scores[i] = actualPlayer == Player.X ? OCCUPIED_FIELD_SCORE : -OCCUPIED_FIELD_SCORE;
                 }
             }
 
