@@ -9,7 +9,7 @@ class AIController {
     }
 
     void moveAI() { //TODO How to test that?
-        int[] boardsFields = new int[Model.BOARD_FIELDS_NUMNER];
+        int[] boardsFields = new int[Model.NUMBER_OF_BOARD_FIELDS];
         System.arraycopy(controller.model.getFields(), 0, boardsFields, 0, boardsFields.length); //TODO Refactor controller.model snake
         controller.moveAI(AIMinimax.chooseFieldForAI(boardsFields));
     }

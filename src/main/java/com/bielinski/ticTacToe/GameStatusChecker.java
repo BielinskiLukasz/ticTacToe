@@ -26,7 +26,7 @@ class GameStatusChecker {
     private static boolean isItAWinningCombination(int field1, int field2, int field3) {
         return field1 == field2 &&
                 field1 == field3 &&
-                !(field1 == 0);
+                !(field1 == Player.NONE_PLAYER_CODE);
     }
 
     static boolean isDraw(int[] checkBoard) {
@@ -40,9 +40,12 @@ class GameStatusChecker {
     }
 
     private static boolean isWinningCombinationUnavailable(int field1, int field2, int field3) {
-        return (!(field1 == 0) || !(field2 == 0) || !(field3 == 0)) &&
-                ((field1 == 1) || (field2 == 1) || (field3 == 1)) &&
-                ((field1 == -1) || (field2 == -1) || (field3 == -1));
+        return (!(field1 == Player.NONE_PLAYER_CODE) || !(field2 == Player.NONE_PLAYER_CODE) ||
+                !(field3 == Player.NONE_PLAYER_CODE)) &&
+                ((field1 == Player.PLAYER_X_CODE) || (field2 == Player.PLAYER_X_CODE) ||
+                        (field3 == Player.PLAYER_X_CODE)) &&
+                ((field1 == Player.PLAYER_Y_CODE) || (field2 == Player.PLAYER_Y_CODE) ||
+                        (field3 == Player.PLAYER_Y_CODE));
     }
 
     static int[] takeWinningCombination(int[] checkBoard) {

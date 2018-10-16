@@ -2,14 +2,15 @@ package com.bielinski.ticTacToe;
 
 class Model {
 
-    static final int BOARD_FIELDS_NUMNER = 9;
+    static final int BOARD_WIDTH = 3;
     private final BoardController controller;
     private final int[] fields;
+    static final int NUMBER_OF_BOARD_FIELDS = (int) Math.pow(BOARD_WIDTH, 2);
     Player currentPlayer;
 
     Model(BoardController controller) {
         this.controller = controller;
-        fields = new int[BOARD_FIELDS_NUMNER];
+        fields = new int[NUMBER_OF_BOARD_FIELDS];
         currentPlayer = Player.randomChooseFirstPlayer();
     }
 
@@ -18,7 +19,7 @@ class Model {
     }
 
     void takeField(int fieldNumber) {
-        if (isFieldAvailable(fieldNumber)) fields[fieldNumber] = currentPlayer == Player.X ? 1 : -1;
+        if (isFieldAvailable(fieldNumber)) fields[fieldNumber] = currentPlayer.fieldCode();
     }
 
     void afterMoveDataChange() {
@@ -30,13 +31,13 @@ class Model {
     }
 
     private boolean isFieldAvailable(int fieldNumber) {
-        return fields[fieldNumber] == 0;
+        return fields[fieldNumber] == Player.NONE_PLAYER_CODE;
     }
 
     void resetData() {
         currentPlayer = Player.randomChooseFirstPlayer();
         for (int i = 0; i < fields.length; i++) {
-            fields[i] = 0;
+            fields[i] = Player.NONE_PLAYER_CODE;
         }
     }
 }

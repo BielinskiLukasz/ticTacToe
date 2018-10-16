@@ -24,7 +24,7 @@ abstract class BoardController {
         if (GameStatusChecker.isWinner(model.getFields())) {
             gameEnds = true;
             view.showWinningCombination(GameStatusChecker.takeWinningCombination(model.getFields()));
-            view.showWinner(model.currentPlayer == Player.X);
+            view.showWinner(model.currentPlayer);
         } else if (GameStatusChecker.isDraw(model.getFields())) {
             gameEnds = true;
             view.showDraw();

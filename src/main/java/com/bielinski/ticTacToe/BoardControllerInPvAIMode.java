@@ -7,6 +7,10 @@ class BoardControllerInPvAIMode extends BoardController {
     private BoardControllerInPvAIMode() {
         super();
         ai = new AIController(this);
+        moveAiIfItsHisRound();
+    }
+
+    private void moveAiIfItsHisRound() {
         if (model.currentPlayer == Player.O)
             ai.moveAI();
     }
@@ -23,13 +27,11 @@ class BoardControllerInPvAIMode extends BoardController {
 
     void afterMoveAction() {
         afterMove();
-        if (model.currentPlayer == Player.O)
-            ai.moveAI();
+        moveAiIfItsHisRound();
     }
 
     void restartGame() {
         super.restartGame();
-        if (model.currentPlayer == Player.O)
-            ai.moveAI();
+        moveAiIfItsHisRound();
     }
 }

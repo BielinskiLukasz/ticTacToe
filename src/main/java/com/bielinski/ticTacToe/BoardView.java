@@ -10,8 +10,8 @@ import java.util.List;
 class BoardView extends JFrame implements ActionListener {
 
     private final BoardController controller;
-
     private final List<JButton> buttons;
+
 
     BoardView(BoardController controller) {
         JPanel jPanel = new JPanel();
@@ -36,7 +36,7 @@ class BoardView extends JFrame implements ActionListener {
             buttons.add(jButton);
         }
 
-        jPanel.setLayout(new GridLayout(3, 3));
+        jPanel.setLayout(new GridLayout(Model.BOARD_WIDTH, Model.BOARD_WIDTH));
 
         showStartingPlayerMessage(controller.model.currentPlayer);
         pack();
@@ -47,15 +47,13 @@ class BoardView extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         button.setEnabled(false);
         Player actualPlayer = controller.move(buttons.indexOf(button));
-        button.setText(actualPlayer == Player.X ? "X" : "O");
+        button.setText(actualPlayer.name());
         controller.afterMoveAction();
     }
 
-    void showWinner(boolean isPlayerX) {
+    void showWinner(Player currentPlayer) {
         disableAllButtons();
-        String winner;
-        if (isPlayerX) winner = "X";
-        else winner = "O";
+        String winner = currentPlayer.name();
         JOptionPane.showMessageDialog(null, "Game over! The winner is " + winner);
     }
 
@@ -92,16 +90,12 @@ class BoardView extends JFrame implements ActionListener {
     }
 
     private void showStartingPlayerMessage(Player currentPlayer) {
-        if (currentPlayer == Player.X) {
-            JOptionPane.showMessageDialog(null, "Player X start!");
-        } else {
-            JOptionPane.showMessageDialog(null, "Player O start!");
-        }
+        JOptionPane.showMessageDialog(null, "Player " + currentPlayer.name() + " start!");
     }
 
     void viewAIMove(int fieldNumber) {
         JButton button = buttons.get(fieldNumber);
         button.setEnabled(false);
-        button.setText("O");
+        button.setText(Player.O.name());
     }
 }
