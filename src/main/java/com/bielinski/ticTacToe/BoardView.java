@@ -46,8 +46,8 @@ class BoardView extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         button.setEnabled(false);
-        Player actualPlayer = controller.move(buttons.indexOf(button));
-        button.setText(actualPlayer.name());
+        controller.move(buttons.indexOf(button));
+        button.setText(controller.getCurrentPlayer().name());
         controller.afterMoveAction();
     }
 

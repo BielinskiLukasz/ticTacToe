@@ -10,10 +10,12 @@ abstract class BoardController {
         this.view = new BoardView(this);
     }
 
-    Player move(int buttonNumber) { //TODO Remove Player return (why its do it???)
+    void move(int buttonNumber) {
         model.takeField(buttonNumber);
-        if (model.currentPlayer == Player.X) return Player.X;
-        else return Player.O;
+    }
+
+    Player getCurrentPlayer() {
+        return model.currentPlayer;
     }
 
     abstract void afterMoveAction();
