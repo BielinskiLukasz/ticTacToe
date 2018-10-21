@@ -67,9 +67,9 @@ public class AIMinimaxTest {
     public void shouldReturn4forAIToWinTheGame() {
         //given
         int[] boardsFields = {
-                Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE,
+                Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE,
                 Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE,
-                Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_Y_CODE
+                Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_O_CODE
         };
         //when
         int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);
@@ -81,9 +81,9 @@ public class AIMinimaxTest {
     public void shouldReturn0WhenItsOnlyOneEmptyField() {
         //given
         int[] boardsFields = {
-                Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE,
-                Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE,
-                Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE
+                Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE, Player.PLAYER_O_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_O_CODE, Player.PLAYER_X_CODE,
+                Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.PLAYER_O_CODE
         };
         //when
         int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);
@@ -95,9 +95,9 @@ public class AIMinimaxTest {
     public void shouldReturn2WhenItsOnlyOneEmptyField() {
         //given
         int[] boardsFields = {
-                Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE,
-                Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE,
-                Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE
+                Player.PLAYER_O_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_O_CODE, Player.PLAYER_X_CODE,
+                Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.PLAYER_O_CODE
         };
         //when
         int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);
@@ -109,9 +109,9 @@ public class AIMinimaxTest {
     public void shouldReturn3Or4forAIToWinTheGame() {
         //given
         int[] boardsFields = {
-                Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE,
                 Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE,
-                Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE
+                Player.PLAYER_O_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE
         };
         //when
         int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);
@@ -123,8 +123,8 @@ public class AIMinimaxTest {
     public void shouldReturn4toPreventThePlayerFromWinning() {
         //given
         int[] boardsFields = {
-                Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE,
-                Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_Y_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE,
+                Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_O_CODE,
                 Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE
         };
         //when
@@ -137,9 +137,9 @@ public class AIMinimaxTest {
     public void shouldReturn5toPreventThePlayerFromWinning() {
         //given
         int[] boardsFields = {
-                Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE, Player.PLAYER_X_CODE,
-                Player.NONE_PLAYER_CODE, Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE,
-                Player.NONE_PLAYER_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE
+                Player.PLAYER_O_CODE, Player.PLAYER_X_CODE, Player.PLAYER_X_CODE,
+                Player.NONE_PLAYER_CODE, Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE,
+                Player.NONE_PLAYER_CODE, Player.PLAYER_O_CODE, Player.PLAYER_X_CODE
         };
         //when
         int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);
@@ -152,7 +152,7 @@ public class AIMinimaxTest {
         //given
         int[] boardsFields = {
                 Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE,
-                Player.NONE_PLAYER_CODE, Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE,
+                Player.NONE_PLAYER_CODE, Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE,
                 Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE
         };
         //when
@@ -167,7 +167,7 @@ public class AIMinimaxTest {
         int[] boardsFields = {
                 Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE,
                 Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE,
-                Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_Y_CODE
+                Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_O_CODE
         };
         //when
         int bestFieldIndex = AIMinimax.chooseFieldForAI(boardsFields);

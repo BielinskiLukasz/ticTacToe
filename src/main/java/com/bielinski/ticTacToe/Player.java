@@ -5,7 +5,7 @@ public enum Player {
     O;
 
     static final int PLAYER_X_CODE = 1;
-    static final int PLAYER_Y_CODE = -1;
+    static final int PLAYER_O_CODE = -1;
     static final int NONE_PLAYER_CODE = 0;
 
     public Player nextPlayer() {
@@ -17,6 +17,6 @@ public enum Player {
     }
 
     public int fieldCode() {
-        return this == X ? PLAYER_X_CODE : PLAYER_Y_CODE;
+        return this == X ? PLAYER_X_CODE : PLAYER_O_CODE;
     }
 }

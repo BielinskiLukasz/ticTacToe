@@ -11,7 +11,7 @@ class Model {
     Model(BoardController controller) {
         this.controller = controller;
         fields = new int[NUMBER_OF_BOARD_FIELDS];
-        currentPlayer = Player.randomChooseFirstPlayer();
+        selectFirstPlayer();
     }
 
     int[] getFields() {
@@ -19,10 +19,16 @@ class Model {
     }
 
     void takeField(int fieldNumber) {
-        if (isFieldAvailable(fieldNumber)) fields[fieldNumber] = currentPlayer.fieldCode();
+        if (isFieldAvailable(fieldNumber)) {
+            takeFieldByPlayer(fieldNumber);
+        }
     }
 
-    void afterMoveDataChange() {
+    private void takeFieldByPlayer(int fieldNumber) {
+        fields[fieldNumber] = currentPlayer.fieldCode();
+    }
+
+    void afterMoveDataUpdate() {
         switchPlayer();
     }
 
@@ -35,7 +41,15 @@ class Model {
     }
 
     void resetData() {
+        clearFields();
+        selectFirstPlayer();
+    }
+
+    private void selectFirstPlayer() {
         currentPlayer = Player.randomChooseFirstPlayer();
+    }
+
+    private void clearFields() {
         for (int i = 0; i < fields.length; i++) {
             fields[i] = Player.NONE_PLAYER_CODE;
         }

@@ -21,21 +21,46 @@ abstract class BoardController {
     abstract void afterMoveAction();
 
     void afterMove() {
-        boolean gameEnds = false;
+        boolean gameEnds = true;
 
-        if (GameStatusChecker.isWinner(model.getFields())) {
-            gameEnds = true;
-            view.showWinningCombination(GameStatusChecker.takeWinningCombination(model.getFields()));
-            view.showWinner(model.currentPlayer);
-        } else if (GameStatusChecker.isDraw(model.getFields())) {
-            gameEnds = true;
-            view.showDraw();
+        if (isWinner()) {
+            endTheGameWithAWinner();
+        } else if (isDraw()) {
+            endTheGameWithADraw();
+        } else {
+            gameEnds = false;
         }
 
-        if (gameEnds)
-            view.proposeNewGame();
-        else
-            model.afterMoveDataChange();
+        if (gameEnds) {
+            proposeNewGame();
+        } else {
+            continueGame();
+        }
+    }
+
+    private boolean isWinner() {
+        return GameStatusChecker.isWinner(model.getFields());
+    }
+
+    private void endTheGameWithAWinner() {
+        view.showWinningCombination(GameStatusChecker.takeWinningCombination(model.getFields()));
+        view.showWinner(model.currentPlayer);
+    }
+
+    private boolean isDraw() {
+        return GameStatusChecker.isDraw(model.getFields());
+    }
+
+    private void endTheGameWithADraw() {
+        view.showDraw();
+    }
+
+    private void proposeNewGame() {
+        view.proposeNewGame();
+    }
+
+    private void continueGame() {
+        model.afterMoveDataUpdate();
     }
 
     void restartGame() {

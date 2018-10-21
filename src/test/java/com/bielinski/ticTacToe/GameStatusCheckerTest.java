@@ -11,8 +11,8 @@ public class GameStatusCheckerTest {
         //given
         int[] checkBoard = {
                 Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.PLAYER_X_CODE,
-                Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE,
-                Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE
+                Player.PLAYER_O_CODE, Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE,
+                Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE
         };
         //when
         boolean isWinner = GameStatusChecker.isWinner(checkBoard);
@@ -24,9 +24,9 @@ public class GameStatusCheckerTest {
     public void shouldReturnTrueWhenCheckWinnerForOO_XXX_O_Board() {
         //given
         int[] checkBoard = {
-                Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE,
                 Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.PLAYER_X_CODE,
-                Player.NONE_PLAYER_CODE, Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE
+                Player.NONE_PLAYER_CODE, Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE
         };
         //when
         boolean isWinner = GameStatusChecker.isWinner(checkBoard);
@@ -38,8 +38,8 @@ public class GameStatusCheckerTest {
     public void shouldReturnTrueWhenCheckWinnerForOO_O__XXXBoard() {
         //given
         int[] checkBoard = {
-                Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE,
-                Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE,
+                Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE,
                 Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.PLAYER_X_CODE
         };
         //when
@@ -52,9 +52,9 @@ public class GameStatusCheckerTest {
     public void shouldReturnTrueWhenCheckWinnerForXOOXO_XXOBoard() {
         //given
         int[] checkBoard = {
-                Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE,
-                Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE,
-                Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE
+                Player.PLAYER_X_CODE, Player.PLAYER_O_CODE, Player.PLAYER_O_CODE,
+                Player.PLAYER_X_CODE, Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE,
+                Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.PLAYER_O_CODE
         };
         //when
         boolean isWinner = GameStatusChecker.isWinner(checkBoard);
@@ -66,9 +66,9 @@ public class GameStatusCheckerTest {
     public void shouldReturnTrueWhenCheckWinnerForOXOOXX_XOBoard() {
         //given
         int[] checkBoard = {
-                Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE,
-                Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE, Player.PLAYER_X_CODE,
-                Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE
+                Player.PLAYER_O_CODE, Player.PLAYER_X_CODE, Player.PLAYER_O_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_X_CODE, Player.PLAYER_X_CODE,
+                Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE, Player.PLAYER_O_CODE
         };
         //when
         boolean isWinner = GameStatusChecker.isWinner(checkBoard);
@@ -80,9 +80,9 @@ public class GameStatusCheckerTest {
     public void shouldReturnTrueWhenCheckWinnerForXOXOOXO_XBoard() {
         //given
         int[] checkBoard = {
-                Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE,
-                Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE,
-                Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE
+                Player.PLAYER_X_CODE, Player.PLAYER_O_CODE, Player.PLAYER_X_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_O_CODE, Player.PLAYER_X_CODE,
+                Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE
         };
         //when
         boolean isWinner = GameStatusChecker.isWinner(checkBoard);
@@ -94,9 +94,9 @@ public class GameStatusCheckerTest {
     public void shouldReturnTrueWhenCheckWinnerForXOOOXXOOXBoard() {
         //given
         int[] checkBoard = {
-                Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE,
-                Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE, Player.PLAYER_X_CODE,
-                Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE
+                Player.PLAYER_X_CODE, Player.PLAYER_O_CODE, Player.PLAYER_O_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_X_CODE, Player.PLAYER_X_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_O_CODE, Player.PLAYER_X_CODE
         };
         //when
         boolean isWinner = GameStatusChecker.isWinner(checkBoard);
@@ -108,8 +108,8 @@ public class GameStatusCheckerTest {
     public void shouldReturnTrueWhenCheckWinnerFor_OXOX_X__Board() {
         //given
         int[] checkBoard = {
-                Player.NONE_PLAYER_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE,
-                Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE,
+                Player.NONE_PLAYER_CODE, Player.PLAYER_O_CODE, Player.PLAYER_X_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE,
                 Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE
         };
         //when
@@ -123,7 +123,7 @@ public class GameStatusCheckerTest {
         //given
         int[] checkBoard = {
                 Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE,
-                Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_O_CODE, Player.PLAYER_O_CODE,
                 Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE
         };
         //when
@@ -151,7 +151,7 @@ public class GameStatusCheckerTest {
         //given
         int[] checkBoard = {
                 Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE,
-                Player.NONE_PLAYER_CODE, Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE,
+                Player.NONE_PLAYER_CODE, Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE,
                 Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_X_CODE
         };
         //when
@@ -164,9 +164,9 @@ public class GameStatusCheckerTest {
     public void shouldReturnTrueWhenCheckDrawForX_X_O_X_XBoard() {
         //given
         int[] checkBoard = {
-                Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE,
-                Player.PLAYER_Y_CODE, Player.PLAYER_Y_CODE, Player.PLAYER_X_CODE,
-                Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.PLAYER_Y_CODE
+                Player.PLAYER_X_CODE, Player.PLAYER_O_CODE, Player.PLAYER_X_CODE,
+                Player.PLAYER_O_CODE, Player.PLAYER_O_CODE, Player.PLAYER_X_CODE,
+                Player.PLAYER_X_CODE, Player.PLAYER_X_CODE, Player.PLAYER_O_CODE
         };
         //when
         boolean isDraw = GameStatusChecker.isDraw(checkBoard);
@@ -193,8 +193,8 @@ public class GameStatusCheckerTest {
         //given
         int[] checkBoard = {
                 Player.PLAYER_X_CODE, Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE,
-                Player.NONE_PLAYER_CODE, Player.PLAYER_Y_CODE, Player.NONE_PLAYER_CODE,
-                Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_Y_CODE
+                Player.NONE_PLAYER_CODE, Player.PLAYER_O_CODE, Player.NONE_PLAYER_CODE,
+                Player.NONE_PLAYER_CODE, Player.NONE_PLAYER_CODE, Player.PLAYER_O_CODE
         };
         //when
         boolean isDraw = GameStatusChecker.isDraw(checkBoard);

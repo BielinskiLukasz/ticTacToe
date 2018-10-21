@@ -78,15 +78,23 @@ class BoardView extends JFrame implements ActionListener {
         int decision = JOptionPane.showConfirmDialog(null,
                 "Play again?", "GAME ENDS", JOptionPane.YES_NO_OPTION);
         if (decision == 0) {
-            for (JButton button : buttons) {
-                button.setEnabled(true);
-                button.setText("");
-                button.setForeground(UIManager.getColor("Button.foreground"));
-            }
+            resetAllButtons();
             controller.restartGame();
         } else {
             System.exit(0);
         }
+    }
+
+    private void resetAllButtons() {
+        for (JButton button : buttons) {
+            button.setEnabled(true);
+            button.setText("");
+            resetWinningCombinationColors(button);
+        }
+    }
+
+    private void resetWinningCombinationColors(JButton button) {
+        button.setForeground(UIManager.getColor("Button.foreground"));
     }
 
     private void showStartingPlayerMessage(Player currentPlayer) {

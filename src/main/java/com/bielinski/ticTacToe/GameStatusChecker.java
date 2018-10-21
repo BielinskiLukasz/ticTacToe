@@ -44,8 +44,8 @@ class GameStatusChecker {
                 !(field3 == Player.NONE_PLAYER_CODE)) &&
                 ((field1 == Player.PLAYER_X_CODE) || (field2 == Player.PLAYER_X_CODE) ||
                         (field3 == Player.PLAYER_X_CODE)) &&
-                ((field1 == Player.PLAYER_Y_CODE) || (field2 == Player.PLAYER_Y_CODE) ||
-                        (field3 == Player.PLAYER_Y_CODE));
+                ((field1 == Player.PLAYER_O_CODE) || (field2 == Player.PLAYER_O_CODE) ||
+                        (field3 == Player.PLAYER_O_CODE));
     }
 
     static int[] takeWinningCombination(int[] checkBoard) {
