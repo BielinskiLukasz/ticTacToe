@@ -4,7 +4,7 @@ import com.bielinski.ticTacToe.StartController;
 
 import javax.swing.*;
 
-class Main {
+public class Main {
     public static void main(String[] args) {
         upgradeView();
         SwingUtilities.invokeLater(StartController::new);
