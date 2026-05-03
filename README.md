@@ -207,7 +207,7 @@ mvn clean install
 
 ### **Run the game**
 ```bash
-mvn exec:java -Dexec.mainClass="com.bielinski.Main"
+mvn exec:java"
 ```
 
 Or run `Main.java` directly from your IDE.
