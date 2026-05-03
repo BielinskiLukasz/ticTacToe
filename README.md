@@ -2,10 +2,10 @@
 
 ![Status](https://img.shields.io/badge/status-finished-brightgreen)
 ![Version](https://img.shields.io/badge/version-1.0-blue)
-
-![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
-![Swing](https://img.shields.io/badge/Swing-6DB33F?style=for-the-badge&logo=java&logoColor=white)
-![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
+![Java](https://img.shields.io/badge/Java-8-orange?logo=openjdk)
+![Swing](https://img.shields.io/badge/Swing-GUI-6DB33F?logo=java)
+![Maven](https://img.shields.io/badge/Maven-build-C71A36?logo=apachemaven)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
 A classic **Tic Tac Toe** game implemented in **Java 8 + Swing**, featuring two gameplay modes:
 
